@@ -1,0 +1,145 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.left {
+  float: left;
+}
+
+.hide {
+  display: none !important;
+}
+
+.textinput {
+  width: 190px;
+}
+
+.display-block {
+  display: block !important;
+}
+
+.machineBgBreadcrumb {
+  width: 100%;
+}
+
+.machineBgBreadcrumb .breadcrumb {
+  background-color: transparent;
+  margin-bottom: 5px;
+  padding: 0;
+}
+
+.machineBg {
+  background-color: #fff;
+  padding: 8px;
+  width: 100%;
+  float: left;
+
+  .headingTitle {
+    color: #008bd5;
+    font-size: 18px;
+    line-height: 24px;
+    margin: 0 0 6px 0;
+  }
+
+  .machineBox {
+    background-color: #fcfcfc;
+    border: 1px solid #e2e2e2;
+    padding: 10px 15px 0px;
+
+    .machineBoxInner {
+      display: block;
+
+      * {
+        box-sizing: border-box;
+      }
+
+      .machineForm {
+        width: 100%;
+        display: block;
+        margin: 0 0 10px 0;
+        box-sizing: border-box;
+
+        label {
+          font-size: 16px;
+          line-height: 35px;
+          font-family: "open_sansregular";
+          color: #121529;
+          margin: 0;
+          white-space: nowrap;
+          min-width: 90px;
+        }
+      }
+    }
+
+    .adminTemplate {
+      margin: 7px;
+
+      label {
+        display: contents;
+
+        &.detailNode {
+          margin-left: 20px;
+        }
+      }
+
+      span {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .machineDataFound {
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    .noRecord {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      span {
+        font-size: 22px;
+        line-height: 24px;
+        font-weight: 300;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.edit {
+  display: inline-block;
+  padding: 0 10px 0 8px;
+}
+
+// .scopestructure{
+//   .machineBox{
+//     .adminTemplate{
+//       .node__children{
+//         .adminNodeWrapper{
+//           .adminTemplate{
+//         }
+//       }
+//      }
+//     } 
+//   }
+// }
+.panelWrapper {
+  .br-mainpanel {
+    height: calc(100vh - 50px);
+    // overflow: auto !important;
+    background-color: #ffffff !important;
+  }
+
+  ::ng-deep {
+    .ps {
+      .ps-content {
+        max-height: calc(100vh - 50px) !important;
+      }
+    }
+  }
+}

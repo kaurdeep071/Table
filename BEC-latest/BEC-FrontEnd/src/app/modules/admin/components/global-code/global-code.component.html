@@ -1,0 +1,147 @@
+<div class="br-mainpanel" style="position: relative;">
+   <div class="br-pagebody">
+      <div class="row row-sm">
+         <!---->
+         <div class="machineBgBreadcrumb">
+            <ol class="breadcrumb">
+               <li class="breadcrumb-item">Template Management</li>
+               <li class="breadcrumb-item active" aria-current="page">Global Code</li>
+            </ol>
+         </div>
+         <!---->
+         <div class="machineBg">
+            <!---->
+            <form id="globalCodeForm" name="globalCodeForm" #gcForm="ngForm" (ngSubmit)="saveGlobalCode(gcForm);" novalidate>
+               <div class="globalCodeBox">
+                  <div class="globalCodeInner">
+                     <div class="row">
+                        <!---->
+                        <div class="col-sm-6">
+                           <div class="globalCodeForm">
+                              <label>Global Code Category <sup>*</sup></label>
+                              <select class="form-control" id="GlobalCodeCategory" name="GlobalCodeCategory" [(ngModel)]="globalCodeForm.GlobalCodeCategoryId"
+                                 #globalCodeCategory="ngModel" (change)="onChangeDropdown(globalCodeCategory.value)">
+                                 <option value="">Please Select</option>
+                                 <option *ngFor="let category of globalCodeCategories" [value]="category.GlobalCodeCategoryId">{{category.CategoryName}}</option>
+                              </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="globalCodeForm">
+                              <label>Code Name <sup>*</sup></label>
+                              <input type="text" class="form-control" placeholder="Code Name" name="CodeName"
+                                 [(ngModel)]="globalCodeForm.CodeName" #CodeName="ngModel" [value]="globalCodeForm.CodeName" />
+                             </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="globalCodeForm">
+                              <label>Description</label>
+                              <textarea class="form-control" placeholder="Description" name="Description" [(ngModel)]="globalCodeForm.Description"></textarea>
+                           </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="globalCodeForm">
+                              <label>Parent Global Code <sup>*</sup></label>
+                              <globalcode-dropdown name="ParentGlobalCodeId" categoryName="{{selectedCategoryName}}"
+                                 [value]="globalCodeForm.ParentGlobalCodeId" [(ngModel)]="globalCodeForm.ParentGlobalCodeId"
+                                 #category="ngModel" className="form-control"></globalcode-dropdown>
+                           </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="globalCodeForm">
+                              <span class="checkActive">Active</span> <label class="checkbox"><input type="checkbox"
+                                    name="Active" [(ngModel)]="globalCodeForm.IsActive" /><span class="primary"></span></label>
+                           </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="globalCodeForm rgt">
+                              <button type="button" class="btn btn-blue-light lightBlueBtn" (click)="onCancel(gcForm)">Cancel</button>&nbsp;
+                              <button type="submit" class="btn btn-blue-light lightBlueBtn">Save</button>
+                           </div>
+                        </div>
+                        <!---->
+                     </div>
+                  </div>
+               </div>
+            </form>
+            <!---->
+            <div class="hr"></div>
+            <!---->
+            <div class="globalCodeSearch">
+
+               <input class="form-control" type="text" placeholder="Enter text to search" aria-label="Search"
+                  [(ngModel)]="searchText">
+               </div>
+            <!---->
+            <div class="globalCodeTable">
+               <div class="table-responsive">
+                  <table class="table table-bordered">
+                     <thead>
+                        <tr>
+                           <th><a (click)="Sorting('CodeName')">Code Name</a></th>
+                           <th><a (click)="Sorting('GlobalCodeCategory')">Global Code Category</a></th>
+                           <th><a (click)="Sorting('ParentGlobalCode')">Parent Global Code</a></th>
+                           <th><a (click)="Sorting('CreatedOn')">Created On</a></th>
+                           <th class="text-center"><a (click)="Sorting('IsActive')">Active</a></th>
+                           <th class="text-center">Actions</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        
+                        <tr *ngIf="!globalCodes || (globalCodes | search: {GlobalCodeCategory: searchText,CodeName :searchText,ParentGlobalCode:searchText}) ?.length == 0">
+                           <!-- <tr> -->
+                           <td colspan="6" class="text-center">No record found</td>
+                        </tr>
+                        <tr *ngFor="let globalcode of globalCodes | search: {GlobalCodeCategory: searchText,CodeName :searchText,ParentGlobalCode:searchText};">
+                           <td>{{globalcode.CodeName}}</td>
+                           <td>{{globalcode.GlobalCodeCategory}}</td>
+                           <td>{{globalcode.ParentGlobalCode}}</td>
+
+                           <td>{{globalcode.CreatedOn | date: 'dd/MM/yyyy'}}</td>
+                           <td align="middle">
+                              <a (click)="updateGlobalCodeStatus(globalcode.GlobalCodeId,globalcode.IsActive)"
+                                 [attr.title]="globalcode.IsActive? 'Active' : 'In Active'" aria-hidden="true">
+                                 <i class="fa fa-check green" [ngClass]="globalcode.IsActive? 'fa fa-check green' : 'fa fa-times red'"></i>
+                              </a>
+                           </td>
+                           <td align="middle">
+                              <div class="edit"><a title="Edit" (click)="bindGlobalCodeData(globalcode)"><i class="fa fa-pencil black"
+                                       aria-hidden="true"></i></a>
+                              </div>
+                              <div class="cross"><a title="Delete" (click)="deleteGlobalCode(globalcode.GlobalCodeId)"><i
+                                       class="fa fa-trash red" aria-hidden="true"></i></a>
+                              </div>
+                           </td>
+                        </tr>
+
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <tr *ngIf="allItems > 10 && (searchText == null || searchText =='') ">
+               <td>
+                  <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                     <li [ngClass]="{disabled:pager.currentPage === 1}">
+                        <a class="page-link" (click)="getPage(1)">First</a>
+                     </li>
+                     <li [ngClass]="{disabled:pager.currentPage === 1}">
+                        <a class="page-link" (click)="getPage(pager.currentPage - 1)">Previous</a>
+                     </li>
+                     <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                        <a class="page-link" (click)="getPage(page)">{{page}}</a>
+                     </li>
+                     <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                        <a class="page-link" (click)="getPage(pager.currentPage + 1)">Next</a>
+                     </li>
+                     <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                        <a class="page-link" (click)="getPage(pager.totalPages)">Last</a>
+                     </li>
+                  </ul>
+               </td>
+            </tr>
+         </div>
+         <!---->
+      </div>
+      <!---->
+   </div>
+</div>

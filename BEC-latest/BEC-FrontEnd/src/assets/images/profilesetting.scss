@@ -1,0 +1,120 @@
+/* Scss Document */
+.machineBg {
+    background-color: #fff;
+    padding: 30px;
+    width: 100%;
+    float: left;
+	margin: 0 0 30px 0;
+	h1 {
+    font-size: 22px;
+    line-height: 20px;
+	color: #121529;
+    font-family: 'open_sansregular';
+    }
+	.panel-group {
+    margin-bottom:35px;
+		.panel {
+		margin-bottom: 0;
+		border-radius: 0px;
+		margin-bottom: 20px;
+		background-color: #fff;
+		border-radius: 4px;
+		border: 1px solid #cccccc;
+		 }
+		.panel-default {
+			border-color: #cccccc;
+			.panel-heading {
+				color: #121529;
+				background-color: #d8f1fd;
+				font-size:20px; font-family: 'open_sansregular';
+			    border-bottom: 1px solid #cccccc;
+			    padding: 15px 15px;
+				border-top-left-radius: 3px;
+				border-top-right-radius: 3px;
+				position: relative;
+			     .editIcon {
+			    	position: absolute;
+				    right: 21px;
+				   top: 15px;
+			    }
+			}
+			.panel-body {
+				padding: 30px 15px 15px 15px;
+				.profileImage {
+					text-align: center;
+					border-radius: 50%;
+					width: 225px;
+					height: 225px;
+					margin: 0 auto;
+					img {
+						max-width: 100%;
+						width: 100%;
+						border-radius: 50%;
+						box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+					}
+				}
+				.profileDesc {
+					width: 100%;
+					display: block;
+					padding: 26px 0;
+					text-align: center;
+					h2 {
+						font-size: 16px;
+						color: #121529;
+						font-family: 'open_sansregular';
+						line-height: 30px;
+						 span {
+							color: #aaaaaa;
+						}
+					}
+					p {
+						font-size: 16px;
+						color: #121529;
+						font-family: 'open_sansregular';
+						line-height: 40px;
+						span {
+							color: #aaaaaa;
+						}
+					}
+				}
+				.machineForm {
+					width: 100%;
+					display: block;
+					margin: 0 0 20px 0;
+					label {
+						font-size: 16px;
+						line-height: 44px;
+						font-family: 'open_sansregular';
+						color: #121529;
+						margin: 0;
+					}
+					.input-group-text {
+							background-color: #ecf7fc;
+							border: 1px solid #ccccc;
+							border-radius: 0;
+						}
+					input {
+						height: 42px;
+						border-radius: 0;
+						border: 1px solid #e2e2e2;
+						&::placeholder {
+							color: #cccccc;
+							font-size: 14px;
+							font-family: 'open_sansregular';
+						}
+					}
+				}
+				.thumbImage {
+					text-align: center;
+				}
+
+			}
+		}
+		
+    }
+}
+
+
+
+
+

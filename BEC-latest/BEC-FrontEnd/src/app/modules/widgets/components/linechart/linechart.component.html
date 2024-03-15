@@ -1,0 +1,19 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default whiteBg">
+      <div class="panel-heading" role="tab" id="headingThree">
+        <h3 class="panel-title">
+            <span class="trashIcon"><i class="fa fa-trash" (click)="deleteWidget()"></i></span>
+          <a [ngClass]="[show_Graph?'':'collapsed']" data-toggle="collapse" data-parent="#accordion" (click)="showGraph()" aria-expanded="false"
+            aria-controls="collapseThree">
+            Job Completion Report
+          </a>
+        </h3>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse collapse" [ngClass]="[show_Graph?'show':'']" role="tabpanel"
+        aria-labelledby="headingThree">
+        <div class="grapgh">
+          <img src="assets/images/graph3.png" alt="image" title="graph" />
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,140 @@
+modal-content.edit {
+    margin-left: 300px;
+    margin-top: 100px;
+}
+
+.modal.show {
+    display: block;
+
+    .modal-dialog {
+        width: 900px !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+#exampleModal input {
+    &:focus-visible {
+        outline: none;
+    }
+}
+
+#exampleModal {
+    &.modal {
+        &.show {
+            &:before {
+                position: fixed;
+                top: 0;
+                content: "";
+                left: 0;
+                z-index: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: #000;
+                opacity: 0.5;
+            }
+        }
+    }
+
+}
+
+element.style {
+    border: 1px solid #f2f2f2;
+}
+
+.model-content {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+}
+
+.modal-content {
+    // margin-top: 80px;
+    position: absolute;
+    left: 50%;
+    transform: inherit;
+}
+
+.form-group {
+    // overflow: auto;
+    // min-height: 200px;
+    // max-height: 550px;
+    .form-check {
+        &.optionFields {
+            display: flex;
+
+            label {
+                padding: 10px 30px 0 10px;
+            }
+
+            input {
+                margin-top: 15px;
+            }
+
+        }
+
+        &.inputFields {
+            padding: 0 !important;
+        }
+    }
+
+    .inputPrintWrapper {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        grid-gap: 40px;
+
+        label {
+            width: 100%;
+            display: contents;
+        }
+
+        &.inputsField {
+            label {
+                min-width: 180px !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
+
+.modal-footer {
+    padding-bottom: 0;
+    padding-right: 0;
+}
+.questionWrapper{
+    ::ng-deep{
+        .ps{
+            .ps-content{
+                max-height: calc(100vh - 470px) !important;
+            }
+        }
+    }
+    .quesShow{
+        display: flex;
+        align-items: center;
+        grid-gap: 30px;
+    }
+}
+.questionsForm{
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+    grid-gap: 30px;
+    padding: 20px 0;
+    label{
+        margin: 0 !important;
+    }
+    .imageBtnWrapper{
+        width: 230px;
+        .form-control{
+            border: transparent !important;
+            transition: none !important;
+            cursor: pointer !important;
+        }
+    }
+    
+}

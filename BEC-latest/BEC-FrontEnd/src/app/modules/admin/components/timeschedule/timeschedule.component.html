@@ -1,0 +1,61 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel">
+<div class="container">
+  <div class="Update">
+    <button class="btn btn-blue-light lightBlueBtn" (click)="updateData()">Update</button>
+  </div>
+
+  <Font Face="Verdana">
+    <table class="table table-bordered timetable">
+      <tr>
+        <th Colspan="8" class="heading" Align="center">BEC Time Table</th>
+      </tr>
+      <tr>
+        <th Colspan="8" class="left">First Half</th>
+
+      </tr>
+      <tr>
+        <td>Start Time</td>
+        <td>End Time</td>
+      </tr>
+      <tr>
+        <td>
+          <input class="time" atp-time-picker [value]="timetable.FirstHalfStartTime| date:'HH:mm'" readonly
+            name="firstHalfStartTime" [(ngModel)]="datepickerdata.firstHalfStartTime" />
+        </td>
+        <td>
+          <input class="time" atp-time-picker [value]="timetable.FirstHalfEndTime| date:'HH:mm'" readonly
+            name="firstHalfEndTime" [(ngModel)]="datepickerdata.firstHalfEndTime" />
+        </td>
+
+      </tr>
+      <tr>
+        <th Colspan="6" Align="center" class="lunch">Lunch</th>
+      </tr>
+      <tr>
+        <th Colspan="6" class="left">Second Half</th>
+      </tr>
+      <tr>
+        <td>Start Time</td>
+        <td>End Time</td>
+
+      </tr>
+
+      <tr>
+
+        <td>
+          <input class="time" atp-time-picker [value]="timetable.SecondHalfStartTime| date:'HH:mm'" readonly
+            name="secondHalfStartTime" [(ngModel)]="datepickerdata.secondHalfStartTime" />
+        </td>
+        <td>
+          <input class="time" atp-time-picker [value]="timetable.SecondHalfEndTime| date:'HH:mm'" readonly
+            name="secondHalfEndTime" [(ngModel)]="datepickerdata.secondHalfEndTime" />
+        </td>
+      </tr>
+
+    </table>
+  </Font>
+</div>
+</div>

@@ -1,0 +1,161 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<div class="manageAttributeType">
+  <div class="col-sm-12">
+    <div class="manageBox">
+      <form id="attributeForm" name="attributeForm" #attrForm="ngForm"
+        (ngSubmit)="attrForm.valid && saveAttribute(attrForm);" novalidate>
+        <div class="row">
+          <!---->
+          <div class="col-sm-6">
+            <div class="attribute">
+              <label>Attribute<sup>*</sup></label>
+                <input type="text" name="attributeName" #AttributeName="ngModel" #attributename="ngModel"
+                class="form-control" [(ngModel)]="attributeForm.AttributeName" required />
+                <div *ngIf="AttributeName.errors && (attrForm.submitted || AttributeName.touched)" class="error">
+                  {{validationMessage.AttributeName?.required}}
+                </div>
+              </div>   
+            </div>
+          <!----> 
+          <div class="col-sm-6">
+            <div class="attribute">
+              <label>Order No<sup>*</sup></label>
+              <input type="text" class="form-control" #orderno="ngModel" name="orderno" required
+                [(ngModel)]="attributeForm.OrderNo" (keypress)=keyPress($event)/>
+                <div *ngIf="orderno.errors && (attrForm.submitted || orderno.touched)" class="error">
+                  {{validationMessage.OrderNumber?.required}}
+                </div>
+
+            </div>
+        </div>
+          <!---->
+          <div class="col-sm-6" >
+            <div class="attribute">
+              <label>Attribute Type</label>
+              <globalcode-dropdown name="attributeType" categoryName="Attribute Type"
+                [(ngModel)]="attributeForm.AttributeType" #category="ngModel" className="form-control"
+                [value]="attributeForm.AttributeType" (change)="onChangeAttributeType($event)"></globalcode-dropdown>
+            </div>
+          </div>
+          <div class="col-sm-6" *ngIf="!showcategorydropdown">
+            <div class="attribute">
+              <label>Data Type</label>
+              <globalcode-dropdown name={{attributeDatatypeCategory}} categoryName="Data Type"
+                className="form-control" [(ngModel)]="attributeForm.AttributeDataType"
+                [value]="attributeForm.AttributeDataType" #category="ngModel"></globalcode-dropdown>
+            </div>
+          </div>
+          <!-- <div class="col-sm-6" *ngIf="!showcategorydropdown">
+            <div class="attribute">
+              <label>Data Format</label>
+              <globalcode-dropdown name={{attributeDataFormatCategory}} categoryName="Data Format"
+                [(ngModel)]="attributeForm.AttributeFormat" #category="ngModel" [value]="attributeForm.AttributeFormat"
+                className="form-control"></globalcode-dropdown>
+            </div>
+          </div> -->
+          <div class="col-sm-6">
+              <div class="attribute">
+                <label>Required</label>
+                <label class="radio"><input type="radio" name="isRequired" value="1" [(ngModel)]="attributeForm.IsRequired"/><span class="primary"></span></label><span
+                class="checkActive">Yes</span>
+              <label class="radio"><input type="radio" name="isRequired" value="0" [(ngModel)]="attributeForm.IsRequired"/><span class="primary"></span></label>
+              <span class="checkActive">No</span>
+              </div>
+            </div>
+          <div class="col-sm-6" *ngIf="showcategorydropdown">
+              <div class="attribute" *ngIf="!showmultioptions">
+                <label>Category</label>
+                <select class="form-control" name="GlobalCodeCategory" [(ngModel)]="attributeForm.AttributeGlobalCatId"
+                #globalCodeCategory="ngModel">
+                <option value="">Please Select</option>
+                <option *ngFor="let category of globalCodeCategories" [value]="category.GlobalCodeCategoryId">{{category.CategoryName}}</option>
+             </select>
+              </div>
+            </div>
+          <div class="col-sm-12" *ngIf="showmultioptions">
+            <div class="well">
+              <div class="form-group logFormInner">
+                <input type="text" class="form-control" (keydown.enter)="$event.preventDefault()" placeholder="Enter Text" [(ngModel)]="addItemInput"
+                  [ngModelOptions]="{standalone: true}" (keyup.enter)="addItem()" />
+                <div (click)="addItem()" class="input-group-text" title="Add">
+                  <i class="fa fa-plus"></i>
+                </div>
+              </div>
+
+              <div *ngFor="let itemBlock of items; let i=index;">
+                
+                <div class="form-group logFormInner" style="margin:0 0 5px 0!important">
+                  <label><strong>{{i+1}}. </strong> {{itemBlock.item_text}}</label>
+                  <div (click)="deleteItem(i,itemBlock.id)" class="input-group-text1" title="Delete">
+                    <i class="fa fa-close"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <div class="attribute text-right">
+              <button type="button" class="btn btn-blue-light lightBlueBtn" (click)="onCancel()">Clear</button>&nbsp;
+              <button type="submit" class="btn btn-blue-light lightBlueBtn" (click)= "bindData()">Save</button>
+            </div>
+          </div>
+          <!---->
+        </div>
+      </form>
+      <!---->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="jobHeading">
+            <h2>Attributes</h2>
+          </div>
+          <div class="jobTypeTable">
+            <div class="table-responsive">               
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 23%;"><a >Attribute</a></th>
+                    <th><a>Attribute Type</a></th>
+                    <th><a >Data Type</a></th>
+                    <th><a >Required</a></th>                    
+                    <th><a >Order No.</a></th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>     
+                <perfect-scrollbar style="max-height:200px;">           
+                <tbody>
+                                   
+                  <tr *ngIf="attrributesList?.length == 0">
+                    <td colspan="6" class="text-center">No record found</td>
+                  </tr>
+                  <!-- <tr *ngFor="let list of atrributesList"> -->
+                  <tr *ngFor="let list of attrributesList ">
+                    <!-- <td>{{MachinSegment.MachinSegments}}</td> -->
+                    <td style="width: 23%;">{{list.AttributeName}}</td>
+                    <td>{{list.AttributeType}}</td>
+                    <td>{{list.AttributeDataType}}</td>
+                    <td><div *ngIf="list.IsRequired ==true">Yes</div>
+                      <div *ngIf="list.IsRequired == false">No</div></td>
+                     
+                    <td>{{list.OrderNo}}</td>
+                    <td>
+                      <div class="edit"><a (click)="bindAttributedata(list)"><i class="fa fa-pencil black" title="Edit"
+                            aria-hidden="true"></i></a></div>
+                      <div class="cross"><a (click)="deleteAttribute(list.ObjectAttributeId)"><i title="Delete"
+                            class="fa fa-times red" aria-hidden="true"></i></a></div>
+                    </td>
+                  </tr>               
+           
+                </tbody>  
+              </perfect-scrollbar>            
+              </table>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>

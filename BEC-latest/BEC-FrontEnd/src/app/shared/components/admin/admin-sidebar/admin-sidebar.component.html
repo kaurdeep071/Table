@@ -1,0 +1,121 @@
+<div class="br-sideleft ps">
+      <!-- <perfect-scrollbar [config]="config"> -->
+   <perfect-scrollbar>
+      <ul class="br-sideleft-menu">
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/dashboard']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Dashboard</span>
+            </a>
+         </li>
+         <li class="br-menu-item">
+            <a class="br-menu-link has-menu" [ngClass]="[show_menu?'show':'']" (click)="showmenu()">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Manage</span>
+            </a>
+            <ul class="br-menu-sub" [ngClass]="[show_menu?'show':'']">
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/managejobtype']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Job Types</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/managemachinetype']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Machine Types </a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/managemachines']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Machines</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/segment']" class="sub-link"><i
+                        class="fa fa-angle-right"></i>Segments</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/parts']" class="sub-link"><i
+                        class="fa fa-angle-right"></i>Parts</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/inventory']" class="sub-link"><i
+                        class="fa fa-angle-right"></i>Inventory</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/globalcategory']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Global Code Category</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/globalcode']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Global Code</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/scopeofwork']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Scope of Work</a></li>
+                     <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/updateanswers']"
+                        class="sub-link"><i class="fa fa-angle-right"></i>Update Answers</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/Additionalhours']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Additional Working Hours</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/Timeschedule']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Time Table</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/Holidays']" class="sub-link"><i
+                        class="fa fa-angle-right"></i>Holidays</a></li>
+
+            </ul>
+         </li>
+
+
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/users']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Users</span>
+            </a>
+         </li>
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/client']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Clients</span>
+            </a>
+         </li>
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/template']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Templates</span>
+            </a>
+         </li>
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/joblist']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Job List</span>
+            </a>
+         </li>
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/question']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Questions</span>
+            </a>
+         </li>
+         <!-- <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/inventory']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Inventory</span>
+            </a>
+         </li> -->
+         <li class="br-menu-item">
+            <a class="br-menu-link has-menu" [ngClass]="[show_menu_reports?'show':'']" (click)="showmenureports()">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Reports</span>
+            </a>
+            <ul class="br-menu-sub" [ngClass]="[show_menu_reports?'show':'']">
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/jobdetail']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Job Details</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/jobhours']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Job Hours</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/inventory-report']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Job Inventory</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/becperformance']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>BEC Performance</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/technician']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Technician</a></li>
+               <li class="sub-item"><a routerLinkActive="active" [routerLink]="['/admin/technicianpoints']"
+                     class="sub-link"><i class="fa fa-angle-right"></i>Technician productive Points</a></li>
+
+
+            </ul>
+         </li>
+
+         <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/rolespermissions']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Roles & Permissions</span>
+            </a>
+         </li>
+         <!-- <li class="br-menu-item">
+            <a routerLinkActive="active" [routerLink]="['/admin/timetable']" class="br-menu-link ">
+               <img src="assets/images/stages.png" alt="image" />
+               <span class="menu-item-label">Time Table</span>
+            </a>
+         </li> -->
+      </ul>
+   </perfect-scrollbar>
+</div>

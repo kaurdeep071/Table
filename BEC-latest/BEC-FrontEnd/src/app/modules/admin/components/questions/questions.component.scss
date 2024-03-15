@@ -1,0 +1,435 @@
+@import "custom_variables.scss";
+
+.machineBgBreadcrumb
+{
+width:100%;
+}
+.machineBgBreadcrumb .breadcrumb {
+    background-color: transparent;
+    margin-bottom: 5px;
+	padding: 0;
+}
+.breadcrumb .breadcrumb-item {
+    font-size: 17px;
+    font-weight: 400;
+}
+.breadcrumb-item.active::before {
+    display: inline-block;
+    padding-right: 0.5rem;
+    color: #6c757d;
+    content: "\f101";
+	font-family:'FontAwesome';
+}
+.questionBg {
+	background-color: #fff;
+	padding:8px;
+	width: 100%;
+	float:left;
+	.questionsBox {
+		background-color: #fcfcfc;
+		border: 1px solid #e2e2e2;
+		padding: 10px 25px 0px;
+		.questionsBoxInner {
+			display: block;
+			.questionsForm {
+				width: 100%;
+				display: block;
+				margin: 0 0 10px 0;
+				
+				label {
+					font-size: 16px;
+					line-height:35px;
+					font-family: 'open_sansregular';
+					color: #121529;
+					margin: 0;
+				}
+				input {
+					height:36px;
+					border-radius: 0;
+					border: 1px solid #e2e2e2;
+					&::placeholder {
+						font-family: 'open_sansregular';
+					}
+				}
+				select {
+						height:36px;
+						border-radius: 0;
+						border: 1px solid #e2e2e2;
+						option {
+						color: #000;
+						font-size: 14px;
+						font-family: 'open_sansregular';
+				  }
+				}
+				textarea {
+					height:90px;
+					border-radius: 0;
+					border: 1px solid #e2e2e2;
+					resize: none;
+					&::placeholder {
+						font-family: 'open_sansregular';
+					}
+				}
+				.checkbox {
+					background-color: #fff;
+					display: inline-block;
+					height: 28px;
+					margin: 0 .25em;
+					width: 28px;
+					border-radius: 0;
+					border: 1px solid #ccc;
+					position: relative;
+					vertical-align: middle;
+					span {
+						display: block;
+						height: 28px;
+						position: absolute;
+						width: 28px;
+						padding: 0;
+						top: 0;
+						left: 0;
+						&:after {
+							-moz-transform: scaleX(-1) rotate(135deg);
+							-ms-transform: scaleX(-1) rotate(135deg);
+							-webkit-transform: scaleX(-1) rotate(135deg);
+							transform: scaleX(-1) rotate(135deg);
+							-moz-transform-origin: left top;
+							-ms-transform-origin: left top;
+							-webkit-transform-origin: left top;
+							transform-origin: left top;
+							border-right: 4px solid #fff;
+							border-top: 4px solid #fff;
+							content: '';
+							display: block;
+							height: 20px;
+							left: 3px;
+							position: absolute;
+							top: 15px;
+							width: 10px;
+						}
+					}
+					input {
+						display: none;
+						&:checked {
+							&+span {
+								&:after {
+									-webkit-animation: check .8s;
+									-moz-animation: check .8s;
+									-o-animation: check .8s;
+									animation: check .8s;
+									border-color: #555;
+								}
+							}
+							&+.primary {
+								&:after {
+									border-color: #2196F3;
+								}
+							}
+						}
+					}
+				}
+				.checkActive {
+					display: inline-block;
+					vertical-align: middle;
+					height: 28px;
+					line-height: 28px;
+					padding: 0 14px 0 3px;
+				}
+				&.rgt {
+					text-align: right;
+				}
+				#mybutton {
+					    overflow: hidden;
+						position: relative;
+						cursor: pointer;
+						width: auto;
+						padding: 0px;
+						text-align: left;
+						border: 1px solid transparent;
+						font-weight: bold;
+					input#myfile {
+				    height: 42px;
+					cursor: pointer;
+					/* position: relative; */
+					top: 0;
+					width: 100%;
+					line-height: 35px;
+					background-color: #fff;
+					}
+				}
+			}
+			.manageAttribute {
+				text-align: right;
+				font-size: 16px;
+				line-height: normal;
+				font-family: 'open_sansregular';
+				a {
+					color: #008bd5;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+	.hr {
+		background-color: #e3e3e3;
+		width: 100%;
+		height: 1px;
+		margin:15px 0;
+	}
+	.questionsTypeSearch {
+		float: right;
+		margin: 0 0 15px 0;
+		display: none;
+		.form-inline .form-control {
+			width: 355px;
+			border-radius: 0;
+		}
+		.form-inline input::placeholder {
+			color: #cccccc;
+			font-size: 14px;
+			font-family: 'open_sansregular';
+		}
+	}
+	.questionsTypeTable {
+		width: 100%;
+		float: left;
+		.table-bordered {
+			th {
+				border: 0px solid #dee2e6;padding: 5px 10px;
+			}
+			td {
+				border: 0px solid #dee2e6;padding: 5px 10px;
+			}
+		}
+		table {
+			border: 1px solid #dee2e6!important;
+			thead {
+				background-color: #d8f1fd;
+				tr {
+					th {
+						font-size: 16px;
+						font-family: 'open_sansregular';
+						color: #121529;
+						border-bottom-width: 1px;
+					}
+				}
+			}
+			tbody {
+				tr {
+					&:nth-child(even) {
+						background: #f8fdff;
+					}
+					&:nth-child(odd) {
+						background: #FFF;
+					}
+					td {
+						.edit {
+							display: inline-block;
+							padding: 0 10px 0 0;
+						}
+						.cross {
+							display: inline-block;
+						}
+						span {
+							font-size: 17px;
+							font-weight: bold;
+							padding: 0 0 0 10px;
+						}
+						a {
+							i {
+								font-size:18px;font-weight:500;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.dispFlex {
+	display: flex !important;
+}
+
+.dispnone {
+	display: none !important;
+}
+.dispInitial {
+	display: initial;
+}
+
+.modal-body >.node>label {
+    font-weight: bold;
+}
+.addQuestionIcon{
+	background: url("/assets/images/icons/add-question.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+.deleteIcon{
+	background: url("/assets/images/icons/cross.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+.editIcon{
+	background: url("/assets/images/icons/edit.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+.viewMoreIcon{
+	background: url("/assets/images/icons/more.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+.viewIcon{
+	background: url("/assets/images/icons/view.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+.manageOptionIcon{
+	background: url("/assets/images/icons/manage_option.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+.cloneIcon{
+	background: url("/assets/images/icons/clone.png") !important;
+	width: 24px;
+    height: 24px;
+    background-repeat: no-repeat !important;
+    display: inline-block;
+    background-size: 100% !important;
+    vertical-align: middle;
+}
+//Manage Option Css
+
+.attribute {
+width: 100%;
+display: block;
+margin: 0 0 20px 0;
+}
+.attribute input {
+height: 42px;
+border-radius: 0;
+border: 1px solid #e2e2e2;
+}
+.attribute input::placeholder {
+color: #000;
+font-size: 14px;
+font-family: 'open_sansregular';
+}
+.attribute input::placeholder:focus {
+outline: none;
+box-shadow: transparent !important;
+}
+.attribute select {
+height: 42px;
+border-radius: 0;
+border: 1px solid #e2e2e2;
+}
+.attribute select option {
+color: #000;
+font-size: 14px;
+font-family: 'open_sansregular';
+}
+.attribute .checkbox {
+background-color: #fff;
+display: inline-block;
+height: 28px;
+margin: 0 0.25em;
+width: 28px;
+border-radius:0px;
+border: 1px solid #ccc;
+position: relative;
+vertical-align: middle;
+}
+.attribute .checkbox span {
+display: block;
+height: 28px;
+position: absolute;
+width: 28px;
+padding: 0;
+top: 0;
+left: 0;
+}
+.attribute .checkbox span:after {
+  transform: scaleX(-1) rotate(135deg);
+transform-origin: left top;
+border-right: 4px solid #fff;
+border-top: 4px solid #fff;
+content: '';
+display: block;
+height: 20px;
+left: 3px;
+position: absolute;
+top: 15px;
+width: 10px;
+}
+.attribute .checkbox input {
+display: none;
+}
+.attribute .checkbox input:checked + span:after {
+-webkit-animation: check 0.8s;
+-moz-animation: check 0.8s;
+-o-animation: check 0.8s;
+animation: check 0.8s;
+border-color: #555;
+}
+.attribute .checkbox input:checked + .primary:after {
+border-color: #2196f3;
+}
+.attribute .checkActive {
+display: inline-block;
+vertical-align: middle;
+height: 28px;
+line-height: 28px;
+padding: 0 2px 0 3px;
+}
+
+.trashIcon i {
+    font-size: 18px;
+    margin: 8px 0;
+}
+.addMore {
+    margin: 0 0 15px 0;
+}
+.padrightzero {
+	padding-right: 0px;
+}
+.node {
+    padding: 10px 0 5px 7px;
+}
+.node__children {
+    padding: 10px 0 0px 15px;
+}
+.node__children .node {
+    padding: 0 0 4px 15px;
+}
+.nodelabel {
+	margin-bottom: 0;
+}
+.display_none{
+	display: none;
+}

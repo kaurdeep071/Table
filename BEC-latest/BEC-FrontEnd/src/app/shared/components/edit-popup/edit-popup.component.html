@@ -1,0 +1,81 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<!-- Modal -->
+<div *ngIf="showModal" class="modal show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog gray modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Answer</h5>
+        <button type="button" class="close" aria-label="Close" (click)="hideModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 *ngIf="recordNotFound">No Record.</h4>
+        <perfect-scrollbar *ngIf="questionInputMode" class="questionWrapper">
+          <div class="form-group col"> 
+            <div class="quesShow">
+              <h6>{{questionName}}</h6>
+              <input *ngIf="(saveAnswer.QuestionTypeName === 'input' && saveAnswer.InputTypeName === 'single')" type="text" [(ngModel)]="inputQuestionText" (input)="updateInputValues()" style="border-top: none; border-left: none; border-right: none;">
+            </div>
+           
+            <!-- <form #myform="ngForm"> -->
+              <span>
+                <div class="inputPrintWrapper inputsField" *ngFor="let option of optionDetails;let i = index">
+                  <label  for="staticInput{{i}}" class="col-sm-6 col-form-label">{{option.Question}} 
+                  </label>
+                  <input type="text" [(ngModel)]="option.QuestionText" ngModel id="staticInput{{i}}"
+                    (input)="updateInputValues()" style="border-top: none; border-left: none; border-right: none;" />
+                  <span *ngIf="option.Required && !option.QuestionText && isValid" class="text-danger">This field is
+                    mendatory</span>
+                </div>
+              </span>
+           
+            <!-- </form> -->
+          </div>
+        </perfect-scrollbar>
+        <perfect-scrollbar *ngIf="questionCheckMode" class="questionWrapper">
+          <div class="form-group col">
+            <h6>{{questionName}}</h6>
+            <div class="form-check optionFields inputFields" *ngFor="let option of optionDetails;index as i">
+              <input type="checkbox" [checked]="option.QuestionText == 'Yes'" id="staticCheck{{i}}"
+                style="border-top: none; border-left: none; border-right: none;"
+                (change)="updateCheckValues($event, option)" />
+              <label for="staticCheck{{i}}" class="form-check-label">{{option.Question}}
+              </label>
+            </div>
+          </div>
+        </perfect-scrollbar>
+        <perfect-scrollbar *ngIf="questionOptionMode" class="questionWrapper">
+          <div class="form-group col">
+            <h6>{{questionName}}</h6>
+            <div class="form-check optionFields" *ngFor="let option of optionDetails;index as i">
+              <label class="form-check-label" for="radio{{i}}">{{option.Question}}</label>
+              <input type="radio" class="form-check-input" id="radio{{i}}" name="optradio"
+                [checked]="option.QuestionText.trim() =='Yes'" (click)="updateRadioValue($event, option)" />
+            </div>
+          </div>
+        </perfect-scrollbar>
+        <div *ngIf="questionModeVisible" class="col-sm-12 dispFlex">
+          <div class="questionsForm">
+            <label> Reference Image </label>
+            <div id="mybutton" class="imageBtnWrapper">
+              <input type="file" #myInputVariable class="form-control" accept="image/*" 
+                (change)="imgUpload($event)" />
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 dispFlex">
+          <div class="modal-footer">
+            <a class="btn btn-blue-light lightBlueBtn" (click)="hideModal()">Cancel</a>&nbsp;
+            <button class="btn btn-blue-light lightBlueBtn" (click)="updateAnswer()">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

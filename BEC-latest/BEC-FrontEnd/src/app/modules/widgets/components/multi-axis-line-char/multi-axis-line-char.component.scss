@@ -1,0 +1,118 @@
+@import "custom_variables.scss";
+
+.whiteBg
+{
+background-color:#fff;
+margin: 0 0 30px 0;
+}
+.whiteBg h3 {
+    padding: 20px 20px;font-family: 'open_sanslight';
+	font-size: 20px;
+	border-bottom: 1px solid #eaeaea;
+	color: #121529;
+	position:relative;
+}
+.whiteBg h3 a {
+	color: #121529;
+}
+.whiteBg ul
+{
+margin: 0px;
+padding: 10px 20px 0 20px;
+list-style: none;
+}
+.whiteBg ul li
+{
+    font-size: 13px;
+    line-height: normal;
+    font-family: 'open_sansregular';
+    color: #505458;
+    position: relative;
+    padding: 14px 0;
+}
+.whiteBg ul li span {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    line-height: 25px;
+    padding: 0;
+    /* float: right; */
+    text-align: center;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.whiteBg.stages ul {
+    padding: 10px 20px 0 40px;
+}
+.whiteBg.stages ul li
+{
+    font-size: 13px;
+    line-height: normal;
+    font-family: 'open_sansregular';
+    color: #505458;
+    position: relative;
+    padding: 14px 0;
+}
+.whiteBg.stages ul li h5
+{
+    font-size: 13px;
+    font-family: 'open_sansbold';
+    line-height: 20px;
+}
+.whiteBg.stages ul li p
+{
+font-size:11px;font-family: 'open_sansregular';	
+}
+.whiteBg.stages ul li .leftborder
+{
+    position: absolute;
+    left: -31px;
+    top: 17px;
+    width: 20px;
+    height: 20px;
+    background-color: #d5d5d5;
+    border-radius: 50%;
+}
+.whiteBg.stages ul li .leftborder:before {
+    content: "";
+    height:45px;
+    width: 1px;
+    position: absolute;
+    background-color: #000;
+    top: 19px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.whiteBg.stages ul li:last-child .leftborder:before {
+    display: none;
+}
+.panel-title > a:before {
+    top: 50%;
+    right: 30px;
+    font-family: FontAwesome;
+    content: "\f068";
+    padding-right: 5px;
+    position: absolute;
+    transform: translateY(-50%);
+	font-size: 12px;
+}
+
+span.trashIcon {
+    right:5px; position: absolute;
+    }
+.panel-title > a.collapsed:before {
+    float: right !important;
+    content:"\f067";
+    font-family: FontAwesome;
+}
+.panel-title > a:hover, 
+.panel-title > a:active, 
+.panel-title > a:focus  {
+    text-decoration:none;
+}
+.grapgh img {
+    max-width: 100%;
+    width: 100%;
+}

@@ -1,0 +1,243 @@
+<div class="br-mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <div class="row row-sm">
+      <!---->
+      <div class="machineBgBreadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Reports</li>
+          <li class="breadcrumb-item active" aria-current="page"><b>TECHNICIAN REPORT</b></li>
+        </ol>
+        <div class="print">
+          <button class="btn btn-blue-light lightBlueBtn" (click)="captureScreen()">Print</button>
+        </div>
+      </div>
+      <!---->
+      <div class="machineBg">
+        <!---->
+        <div class="questionsBox">
+          <div class="questionsBoxInner">
+            <div class="row">
+              <!---->
+              <div class="col-sm-3">
+                <div class="questionsForm">
+                  <label>Choose Technician </label>
+                  <select class="form-control" [(ngModel)]="technicianworked.TechnicianId" #technicianid="ngModel">
+                    <option value="0" selected="">Select Technician </option>
+                    <option *ngFor="let detail of techniciandetail" [value]="detail.TechnicianId">
+                      {{detail?.TechnicianName}}</option>
+                  </select>
+                </div>
+              </div>
+              <!---->
+              <div class="col-sm-4">
+                <div class="jobListForm">
+                  <label>From</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
+                          aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control bg-white" readonly="readonly" #drp="bsDatepicker" bsDatepicker
+                      [(ngModel)]="technicianworked.startDate" name="startDate" autocomplete="off"
+                      [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY'}">
+                  </div>
+                </div>
+              </div>
+              <!---->
+              <div class="col-sm-4">
+                <div class="jobListForm">
+                  <label>To</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon2"><i class="fa fa-calendar"
+                          aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control bg-white" readonly="readonly" #drp="bsDatepicker" bsDatepicker
+                      [(ngModel)]="technicianworked.endDate" name="endDate" autocomplete="off"
+                      [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY' }">
+                  </div>
+                </div>
+              </div>
+              <!---->
+              <div class="col-sm-1">
+                <div class="questionsForm">
+                  <i class="fa fa-sort-desc" (click)="showTextBoxes()" aria-hidden="true"></i>
+                </div>
+              </div>
+              <!---->
+            </div>
+
+            <div class="quesHide" *ngIf="show_Text">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="questionsForm">
+                    <label>Machine Type</label>
+                    <select class="form-control" name="machineTypeId" [(ngModel)]="technicianworked.machineTypeId"
+                      (change)="onChangeMachineTypeDropdown()">
+                      <option value="">Please Select</option>
+                      <option *ngFor="let machinetype of machineTypes" [value]="machinetype.MachineTypeId">
+                        {{machinetype?.MachineType}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="questionsForm">
+                    <label>Machine </label>
+                    <select class="form-control" name="machineId" [(ngModel)]="technicianworked.machineId"
+                      (change)="onChangeMachineDropdown()">
+                      <option value="" selected>Please Select</option>
+                      <option *ngFor="let machine of subMachineType" [value]="machine.MachineId">
+                        {{machine?.MachineName}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="questionsForm">
+                    <label>Segment</label>
+                    <select class="form-control" name="segmentId" [(ngModel)]="technicianworked.segmentId"
+                      (change)="onChangeSegmentDropdown()">
+                      <option value="" selected>Please Select</option>
+                      <option *ngFor="let parentsegment of parentSegment" [value]="parentsegment.SegmentId">
+                        {{parentsegment?.Segment}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="questionsForm">
+                    <label>Sub Segment</label>
+                    <select class="form-control" name="subSegmentId" [(ngModel)]="technicianworked.subSegmentId"
+                      (change)="onChangesubSegmentDropdown()">
+                      <option value="" selected>Please Select</option>
+                      <option *ngFor="let subsegment of subSegment" [value]="subsegment.SegmentId">
+                        {{subsegment?.Segment}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="questionsForm text-right">
+                  <button class="btn btn-blue-light lightBlueBtn" (click)=" technicianworkedon()" type="submit">Apply
+                    Filters</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!---->
+
+        <div *ngIf="show_Charts">
+          <div class="row" id="contentToConvert">
+            <div class="col-sm-6">
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default whiteBg">
+                  <div class="panel-heading" role="tab" id="headingTwo">
+                    <h3 class="panel-title"><span class="trashIcon"></span>
+                      <a [ngClass]="[show_Worked?'':'collapsed']" (click)="showWorked()" data-toggle="collapse"
+                        data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">
+                        Machines Worked On
+                      </a>
+                    </h3>
+                  </div>
+                  <div id="collapseTwo" class="panel-collapse collapse collapse" [ngClass]="[show_Worked?'show':'']"
+                    role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="grapgh">
+                      <canvas id='linechart'>{{getlinechart}} </canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default whiteBg">
+                  <div class="panel-heading" role="tab" id="headingThree">
+                    <h3 class="panel-title"><span class="trashIcon"></span>
+                      <a [ngClass]="[show_Hours?'':'collapsed']" (click)="showHours()" data-toggle="collapse"
+                        data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">
+                        Hours Spent
+                      </a>
+                    </h3>
+                  </div>
+                  <div id="collapseThree" class="panel-collapse collapse collapse" [ngClass]="[show_Hours?'show':'']"
+                    role="tabpanel" aria-labelledby="headingThree">
+                    <div class="grapgh">
+                      <canvas id='piechart'>{{getpiechart}} </canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default whiteBg">
+                  <div class="panel-heading" role="tab" id="headingFour">
+                    <h3 class="panel-title"><span class="trashIcon"></span>
+                      <a [ngClass]="[show_FeedBack?'':'collapsed']" (click)="showFeedBack()" data-toggle="collapse"
+                        data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">
+                        Client Feedback
+                      </a>
+                    </h3>
+                  </div>
+                  <div id="collapseFour" class="panel-collapse collapse collapse " [ngClass]="[show_FeedBack?'show':'']"
+                    role="tabpanel" aria-labelledby="headingThree">
+                    <div class="grapgh">
+                      <canvas id='barchart'>{{getareachart}} </canvas>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default whiteBg">
+                  <div class="panel-heading" role="tab" id="headingFour">
+                    <h3 class="panel-title"><span class="trashIcon"></span>
+                      <a [ngClass]="[show_stages_graph?'':'collapsed']" (click)="showStagesData()"
+                        data-toggle="collapse" data-parent="#accordion" aria-expanded="false"
+                        aria-controls="collapseTwo">
+                        Stage Flow
+                      </a>
+                    </h3>
+                  </div>
+                  <div id="collapseFour" class="panel-collapse collapse collapse "
+                    [ngClass]="[show_stages_graph?'show':'']" role="tabpanel" aria-labelledby="headingThree">
+                    <div class="grapgh">
+                      <canvas id='stageChart'>{{getareachart}} </canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="panel-group" id="accordion5" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-default whiteBg">
+                  <div class="panel-heading" role="tab" id="headingFive">
+                    <h3 class="panel-title"><span class="trashIcon"></span>
+                      <a [ngClass]="[show_Jobs?'':'collapsed']" (click)="showJobs()" data-toggle="collapse"
+                        data-parent="#accordion" aria-expanded="false" aria-controls="collapseTwo">
+                        Jobs
+                      </a>
+                    </h3>
+                  </div>
+                  <div id="collapseFive" class="panel-collapse collapse collapse" [ngClass]="[show_Jobs?'show':'']"
+                    role="tabpanel" aria-labelledby="headingFive">
+                    <div class="grapgh">
+                      <canvas id='jobchart'>{{getjobchart}} </canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,388 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <div class="row row-sm">
+      <div class="machineBgBreadcrumb">
+        <ol class="breadcrumb">
+          <!-- <li class="breadcrumb-item" [routerLink]="['/admin/profile']"><a>Home</a></li> -->
+          <li class="breadcrumb-item" aria-current="page">Questions</li>
+        </ol>
+      </div>
+      <div class="questionBg">
+        <div class="structure">
+          <div class="container-fluid">
+            <form [formGroup]="TemplateForm">
+              <div class="row">
+                <div class="col-sm-7 dispFlex rgt">
+                  <div class="col-sm-4">
+                    <!---->
+                    <label>Select Template</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <!-- (change)="onChangeDropdown(templateddl.value)" -->
+                    <select class="form-control" id="TemplateId" name="TemplateId" formControlName="TemplateId"
+                      (change)="templateOnChange($event.target)">
+                      <option selected value=""> Select Template</option>
+                      <option *ngFor="let template of templateData" [value]="template.TemplateId">
+                        {{template.TemplateName}}</option>
+                    </select>
+                    <span class="help-block" *ngIf="!TemplateForm.get('TemplateId').valid && TemplateForm.get('TemplateId').touched">
+                      {{ templateErrors.TemplateId }}
+                    </span>
+                  </div>
+                </div>
+                <div class="col-sm-5">
+                  <div class="treeForm addNewQuestionset">
+                    <button id="addQuestion" class="btn btn-blue-light lightBlueBtn" *ngIf="!(showQuestion)"
+                      (click)="addQuestion(0,AddQuestionPopupTemplate,0,false,true)">Add
+                      Question</button>
+                    <button id="addQuestion" class="btn btn-blue-light lightBlueBtn" *ngIf="(showQuestion)"
+                      (click)="addQuestion(0,AddQuestionPopupTemplate,0,false,true)">Add Next Step
+                      Question</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Define the recursive template. -->
+        <ng-template #nodeTemplateRef let-node="node" let-index="index">
+          <div class="node" *ngIf="node">
+            <b *ngIf="node.IsRoot && index > 0">
+              <hr class="m-0"> <br /></b>
+            <b *ngIf="node.IsRoot">{{index + 1}}. (Order No. {{node.Stage}})<br /></b>
+            <i class="fa font-weight-bold"
+            [ngClass]="openIndexes.indexOf(index) !== -1 ? 'fa-angle-down' : 'fa-angle-right' " *ngIf="node.IsRoot"
+            (click)="collapseExpand(index, $event)"></i> &nbsp;
+            <label class="nodelabel"> {{ node.Question }} &nbsp;
+              <a class="viewIcon"
+                (click)="showExistingSteps(ShowExistingQuestionPopupTemplate,node.QuestionId,node.Option)"
+                *ngIf="node.GoExistingStep" title="View Next Question"></a>
+            </label>
+            <a class="node__label viewMoreIcon" (click)="showMoreOption($event)" title="Actions">
+            </a> &nbsp;
+            <div class="iconsGroup dispInitial dispnone">
+              <a (click)="editOption(data[index].QuestionId,ManageOptionsPopupTemplate, node)" *ngIf="node.Option"
+                class="node__label editIcon" title="Edit Option">
+                <!-- {{node | json}} -->
+              </a>
+              <a (click)="editQuestion(data[index].QuestionId,AddQuestionPopupTemplate, node)" *ngIf="!(node.Option)"
+                class="node__label editIcon" title="Edit Question">
+              </a> &nbsp;
+              <a (click)="deleteQuestion(node)" class="node__label deleteIcon"
+                [title]="node.Option?'Delete Option':'Delete Question'">
+              </a> &nbsp;
+              <a *ngIf="node.QuestionTypeName == 'Decision' && node.ActionName != 'Go to next step'"
+                (click)="manageOption(data[index].QuestionId,ManageOptionsPopupTemplate,node.QuestionId, (node.Children && node.Children.length > 0 ? node.Children[0].DataType : ''), (node.Children && node.Children.length > 0 ? node.Children[0].DataTypeName : ''))"
+                class="node__label manageOptionIcon" title="Add Option">
+              </a>
+              <a *ngIf="node.QuestionTypeName == 'Input' && node.InputTypeName == 'Multi' && node.ActionName != 'Go to next step'"
+                (click)="manageOption(data[index].QuestionId,ManageOptionsPopupTemplate,node.QuestionId, (node.Children && node.Children.length > 0 ? node.Children[0].DataType : ''), (node.Children && node.Children.length > 0 ? node.Children[0].DataTypeName : ''))"
+                class="node__label manageOptionIcon" title="Add Option">
+              </a> &nbsp;
+              <a *ngIf="(node.QuestionTypeName == 'Input' || node.QuestionTypeName == 'Label') && node.InputTypeName != 'Multi' && node.ActionName != 'Go to next step' && !(node.NextQuestion > 0) && node.ActionName != 'Go to existing question'"
+                (click)="addQuestion(data[index].QuestionId,AddQuestionPopupTemplate,node.QuestionId,false,false,data[index].Stage)"
+                class="node__label addQuestionIcon" title="Add Question">
+              </a>
+
+              <a *ngIf="node.Option && node.InputTypeName != 'Multi' && node.ActionName != 'Go to next step' && !(node.NextQuestion > 0)  && node.ActionName != 'Go to existing question'"
+                (click)="addQuestion(data[index].QuestionId,AddQuestionPopupTemplate,node.QuestionId,true,false,data[index].Stage)"
+                class="node__label addQuestionIcon" title="Add Question">
+              </a> &nbsp;
+              <a title="Clone" *ngIf="!(node.Option) && node.IsRoot" (click)="cloneQuestion(node.QuestionId)">
+                <i aria-hidden="true" class="cloneIcon" title="Clone Record"></i>
+              </a>
+            </div>
+            <!-- freshDataLoaded -->
+            <div class="node__children" [ngClass]="openIndexes.indexOf(index) !== -1 ? '' : 'dispnone' ">
+              <ng-template ngFor let-child [ngForOf]="node.Children">
+                <ng-template [ngTemplateOutlet]="nodeTemplateRef"
+                  [ngTemplateOutletContext]="{ node: child, index: index }">
+                </ng-template>
+              </ng-template>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template [ngTemplateOutlet]="nodeTemplateRef" [ngTemplateOutletContext]="{ node: d, index: i }"
+          *ngFor="let d of data; let i =index">
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #AddQuestionPopupTemplate>
+  <div *ngIf="loadingquestion">
+    <app-loading-screen></app-loading-screen>
+  </div>
+  <div class="modal-header">
+    <h4 class="modal-title">Question Detail</h4>
+    <button type="button" class="close" (click)="closeModal()">&times;</button>
+  </div>
+  <div class="modal-body questionBg">
+    <form [formGroup]="QuestionsForm">
+      <div class="questionsBox">
+        <div class="questionsBoxInner">
+          <div class="row">
+            <!---->
+            <!-- <input type="hidden" name="PreviousQuestion" [(ngModel)]="preque"> -->
+            <div class="col-sm-6">
+              <div class="questionsForm">
+                <label>Type</label>
+                <globalcode-dropdown name="QuestionType" id="questionTypeSelect" categoryName="Question Type"
+                  formControlName="QuestionType" className="form-control"
+                  (change)="onQuestionTypeChange($event.target)"></globalcode-dropdown>
+                <span class="help-block" *ngIf="!QuestionsForm.get('QuestionType').valiad && QuestionsForm.get('QuestionType').touched">
+                  {{ formErrors.QuestionType }}
+                </span>
+              </div>
+            </div>
+            <!-- <div class="col-sm-6">
+              <div class="questionsForm">
+                <label> Input Type </label>
+                <globalcode-dropdown name="InputType" categoryName="Input Type" formControlName="InputType"
+                  id="questionInputType" className="form-control" (change)="onInputTypeChange($event.target)">
+                </globalcode-dropdown>
+                <span class="help-block" *ngIf="formErrors.InputType">
+                  {{ formErrors.InputType }}
+                </span>
+              </div>
+            </div> -->
+            <div class="col-sm-6" *ngIf="showAction">
+              <div class="questionsForm">
+                <label> Action </label>
+                <globalcode-dropdown name="Action" categoryName="Action" formControlName="Action" id="questionAction"
+                  className="form-control" (change)="triggerValidatorOnChange(); checkQuestionAction($event,i)">
+                </globalcode-dropdown>
+                <span class="help-block" *ngIf="formErrors.Action">
+                  {{ formErrors.Action }}
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6" *ngIf="showDataType">
+              <div class="questionsForm">
+                <label>Data Type</label>
+                <globalcode-dropdown name="DataType" categoryName="Data Type" formControlName="DataType"
+                  id="questionDataType" className="form-control" (change)="triggerValidatorOnChange()">
+                </globalcode-dropdown>
+                <span class="help-block" *ngIf="formErrors.DataType">
+                  {{ formErrors.DataType }}
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6" *ngIf="showNextQuestion">
+              <div class="questionsForm">
+                <label> Next Question </label>
+                <select class="form-control" name="NextQuestion" formControlName="NextQuestion"
+                  id="questionNextQuestion">
+                  <option value="" selected>Select Next Question</option>
+                  <option *ngFor="let question of existingQuestionData" [value]="question.QuestionId">
+                    {{question.Question}}</option>
+                </select>
+                <span class="help-block" *ngIf="formErrors.NextQuestion">
+                  Next Question is required
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="questionsForm">
+                <label>Question</label>
+                <input type="text" class="form-control" placeholder="Question" (blur)="LogValidationError()"
+                  name="Question" formControlName="Question" />
+                <span class="help-block" *ngIf="!QuestionsForm.get('Question').valid && QuestionsForm.get('Question').touched">
+                  {{ formErrors.Question }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="questionsForm">
+                <label>Default Value</label>
+                <input type="text" class="form-control" placeholder="Default Value" name="DefaultValue"
+                  formControlName="DefaultValue" />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="questionsForm">
+                <label> Reference Image </label>
+                <div id="mybutton">
+                  <input type="file" class="form-control" accept="image/*" name="ReferenceImage"
+                    (change)="imgUpload($event)" formControlName="ReferenceImage" />
+                  <!-- <input type="file" id="myfile" class="form-control" name="ReferenceImage"
+                    formControlName="ReferenceImage" [(ngModel)]="ReferenceImage" /> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="questionsForm">
+                <label>Reference Instructions</label>
+                <textarea class="form-control" placeholder="Reference Instructions" name="ReferenceInstructions"
+                  formControlName="ReferenceInstructions"  maxlength="{{charLimit}}" [(ngModel)]="QuestionsForm.value.ReferenceInstructions" (ngModelChange)="checkCharLength($event)"></textarea>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="questionsForm attribute" style="display: flex;">
+                <label class="checkbox"><input type="checkbox" name="Required" formControlName="Required" /><span
+                    class="primary"></span></label><span class="checkActive col-md-2">Required</span>
+
+                <label class="checkbox"><input type="checkbox" name="CaptureImage" formControlName="CaptureImage" />
+                  <span class="primary"></span>
+                </label><span class="checkActive col-md-2">Capture Image</span>
+                <!-- <div> -->
+                <label class="checkbox" *ngIf="linkInventoryToRoot"><input type="checkbox" (click)="LinkedToInventory()"
+                    name="LinkInventory" formControlName="LinkInventory" />
+                  <span class="primary"></span>
+                </label><span *ngIf="linkInventoryToRoot" class="checkActive col-md-2">Link Inventory</span>
+
+                <select class="form-control col-md-3" *ngIf="displayParts && linkInventoryToRoot" name="PartId"
+                  formControlName="PartId"> 
+                  <option value= 0>Select Part</option>
+                  <option [value]="part.PartId" *ngFor="let part of partsData"> {{part.PartName}}</option>
+                </select>
+                <!-- </div> -->
+              </div>
+
+            </div>
+            <div class="col-sm-12 dispFlex">
+              <div>
+                <input class="col-md-3" type="number" *ngIf="linkInventoryToRoot" placeholder="Order No." formControlName="OrderNo"
+                  class="form-control">
+                  <input class="col-md-3" type="number" disabled *ngIf="!(linkInventoryToRoot)" [value]="orderNo" placeholder="Order No." formControlName="OrderNo"
+                  class="form-control">
+                  <span class="help-block" *ngIf="formErrors.OrderNo">
+                      {{formErrors.OrderNo}}
+                    </span>
+              </div>
+              <div class="questionsForm rgt">
+                <a class="btn btn-blue-light lightBlueBtn" (click)="closeModal()">Cancel</a>&nbsp;
+                <a class="btn btn-blue-light lightBlueBtn" (click)="onSubmit(preque,option,newStageQue,orderNo)">Save</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #ManageOptionsPopupTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">Add Options</h4>
+    <div class="col-sm-4">
+      <div class="attribute">
+        <globalcode-dropdown name="ControlType" categoryName="Control Type" className="form-control"
+          (change)="controlChange($event)" id="OptionControlType">
+        </globalcode-dropdown>
+        <span class="help-block" *ngIf="controlTypeRequired">
+          Control Type is required
+        </span>
+      </div>
+    </div>
+    <button type="button" class="close" (click)="closeOptionModal()">&times;</button>
+  </div>
+  <div class="modal-body" id="OptionMoodal">
+    <form [formGroup]="ManageOptionForm">
+      <!-- <input type="hidden" name="QuestionId" formControlName="QuestionId" [(ngModel)]="que"> -->
+      <div formArrayName="Options" class="container padrightzero">
+        <div *ngFor="let child of ManageOptionForm.get('Options').controls; let i = index">
+          <div [formGroupName]="i">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="attribute" *ngIf="singleInputAction || checkboxControl || radioControl">
+                  <input type="text" name="OptionText" placeholder="Option Text" formControlName="OptionText"
+                    class="form-control" (change)="getValidity('OptionText',i)" />
+                  <span class="help-block" *ngIf="getValidity('OptionText', i)">
+                    Option Text is required
+                  </span>
+                </div>
+              </div>
+              <div class="col-sm-3" *ngIf="inputControl">
+                <div class="attribute">
+                  <input type="text" name="OptionDefaultValue" placeholder="Default value"
+                    formControlName="OptionDefaultValue" class="form-control" />
+                </div>
+              </div>
+              <div class="col-sm-2" *ngIf="inputControl">
+                <div class="attribute">
+                  <label class="checkbox"><input type="checkbox" name="RequiredOption"
+                      formControlName="RequiredOption" /><span class="primary"></span></label><span
+                    class="checkActive">Required</span>
+                </div>
+              </div>
+              <div class="col-sm-1 pad0" *ngIf="radioControl || checkboxControl"> 
+                <div class="attribute">
+                  <label class="checkbox"><input type="checkbox" (click)="checkDefaultCheckedOnRadio($event.target)"
+                      name="DefaultOption" formControlName="DefaultOption" /><span class="primary"></span></label> <span
+                    class="checkActive">Default</span>
+                </div>
+              </div>
+              <div class="col-sm-3" *ngIf="singleInputAction || radioControl || checkboxControl"> 
+                <div class="attribute">
+                  <!-- [ngClass]="!(singleInputAction && i != 0) ? 'display_none' : '' " -->
+                  <globalcode-dropdown name="Action" categoryName="Action" formControlName="Action" id="optionAction"
+                    className="form-control" (change)="getValidity('Action',i); checkOptionAction($event,i)">
+                  </globalcode-dropdown>
+                  <span class="help-block" *ngIf="getValidity('Action',i)">
+                    Action is required
+                  </span>
+                </div>
+              </div>
+              <!-- <input type="hidden" *ngIf="!(singleInputAction && i == 0)" class="ActionData" name="Action" categoryName="Action" formControlName="Action" id="optionAction"> -->
+              <div class="col-sm-4" *ngIf="showOptionNextQuestion[i]">
+                <div class="attribute">
+                  <select class="form-control" id="NextQuestionData" name="NextQuestion" formControlName="NextQuestion">
+                    <option value="" selected>Select Next Question</option>
+                    <option *ngFor="let question of existingQuestionData" [value]="question.QuestionId">
+                      {{question.Question}}</option>
+                  </select>
+                  <span class="help-block" *ngIf="getValidity('NextQuestion',i)">
+                    Next Question is required
+                  </span>
+                </div>
+              </div>
+              <div class="col-sm-1">
+                <div class="trashIcon red"> <a (click)="removeOption(i)" *ngIf="i > 0"><i class="fa fa-trash"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 addMoreOptions">
+            <div class="addMore"> <button class="btn btn-blue-light lightBlueBtn" (click)="addMoreOption()">Add
+                More</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-blue-light lightBlueBtn" (click)="closeOptionModal()">Cancel</a>&nbsp;
+        <a class="btn btn-blue-light lightBlueBtn" (click)="onOptionSubmit(que)">Save</a>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #ShowExistingQuestionPopupTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">Next Question Detail</h4>
+    <button type="button" class="close" (click)="closeModal()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <!-- Define the recursive template. -->
+    <ng-template #nodeTemplateRef let-node="node">
+      <div class="node" *ngIf="node">
+        <label> {{ node.Question }} </label>
+        <div class="node__children">
+          <ng-template ngFor let-child [ngForOf]="node.Children">
+            <ng-template [ngTemplateOutlet]="nodeTemplateRef" [ngTemplateOutletContext]="{ node: child }">
+            </ng-template>
+          </ng-template>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngTemplateOutlet]="nodeTemplateRef" [ngTemplateOutletContext]="{ node: existingData }">
+    </ng-template>
+  </div>
+</ng-template>

@@ -1,0 +1,123 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <div class="row row-sm">
+      <!---->
+      <div class="machineBgBreadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" aria-current="page">Roles & Permissions</li>
+        </ol>
+      </div>
+      <!---->
+      <div class="machineBg">
+        <!---->
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="usersForm">
+              <a class="btn btn-blue-light lightBlueBtn" (click)="roleModal(RolesPopupTemplate);">Add
+                New</a>
+            </div>
+          </div>
+        </div>
+        <!---->
+        <div class="hr"></div>
+        <!---->
+        <div class="roleTypeTable">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th><a (click)="Sorting('RoleName')">Role</a></th>
+                  <th>Permissions</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="!(RolesGridData)">
+                  <td colspan="3" class="text-center">No record found</td>
+                </tr>
+                <tr *ngFor="let data of RolesGridData">
+                  <td>{{data.RoleName}}</td>
+                  <td><a class="blueColor"(click)="AssignPermission(data,PermissionsPopupTemplate)">Assign</a></td>
+                  <td align="middle">
+                    <div class="edit"><a (click)="EditRole(data); roleModal(RolesPopupTemplate);"><i class="fa fa-pencil black"
+                          aria-hidden="true"></i></a></div>
+                    <div class="cross"><a (click)="DeleteRole(data.RoleId)"><i class="fa fa-times red"
+                          aria-hidden="true"></i></a></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <tr *ngIf="allItems > 10">
+              <td>
+                 <div *ngFor="let item of pagedItems">{{item.name}}</div> 
+                 <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                       <a class="page-link" (click)="getPage(1)">First</a>
+                    </li>
+                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                       <a class="page-link" (click)="getPage(pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                       <a class="page-link" (click)="getPage(page)">{{page}}</a>
+                    </li>
+                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                       <a class="page-link" (click)="getPage(pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                       <a class="page-link" (click)="getPage(pager.totalPages)">Last</a>
+                    </li>
+                 </ul>
+              </td>
+           </tr> 
+        </div>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>
+
+<ng-template #RolesPopupTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">Manage Role</h4>
+    <button type="button" class="close" (click)="closeRoleModal()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="RolesForm">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="role">Role</div>
+        </div>
+        <div class="col-sm-8">
+          <div class="form-group role">
+            <input type="hidden" name="roleId" formControlName="roleId" [(ngModel)]="RoleIdValue"/>
+            <input type="hidden" name="description" formControlName="description" [(ngModel)]="RoleIdValue"/>
+            <input type="text" class="form-control" placeholder="Role" (blur)="LogValidationError()" name="roleName"
+              formControlName="roleName" [(ngModel)]="RoleValue"/>
+            <span class="help-block" *ngIf="formErrors.RoleName">
+              {{ formErrors.RoleName }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-blue-light lightBlueBtn" (click)="closeRoleModal()">Close</button>&nbsp;
+        <button type="button" class="btn btn-blue-light lightBlueBtn" (click)="insertRole()">Save</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #PermissionsPopupTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title">Manage Permissions</h4>
+      <button type="button" class="close" (click)="modalRef.hide()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <app-permissions [object]='objectlist'></app-permissions>
+    </div>
+  </ng-template>

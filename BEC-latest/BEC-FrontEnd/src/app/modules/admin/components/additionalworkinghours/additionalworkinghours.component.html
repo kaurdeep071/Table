@@ -1,0 +1,141 @@
+<div class="br-mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <div class="row row-sm">
+      <!---->
+      <div class="machineBgBreadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" [routerLink]="['/admin/profile']"><a>Manage</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Additional Working Hours</li>
+        </ol>
+      </div>
+
+      <div class="machineBg">
+
+        <div class="questionsBox">
+          <div class="questionsBoxInner">
+            <div class="row mb-4">
+              <!---->
+              <!---->
+              <div class="col-sm-4">
+                <div class="questionsForm">
+                  <label>Job Code </label>
+                  <select class="form-control" id="jobCode" name="jobCode" [(ngModel)]="ScopeOfWorkForm.jobCode"
+                    #jobcode="ngModel" [value]="ScopeOfWorkForm.jobCode">
+                    <option value=""> All Jobs</option>
+                    <option *ngFor="let record of getFullJobList" [value]="record.JobId">
+                      {{record.JobCode}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="jobListForm">
+                  <label>From</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
+                          aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control bg-white" readonly="readonly" #drp="bsDatepicker" bsDatepicker
+                      [(ngModel)]="additionalWorked.startDate" name="startDate" autocomplete="off"
+                      [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY'}">
+                  </div>
+                </div>
+              </div>
+              <!---->
+              <div class="col-sm-4">
+                <div class="jobListForm">
+                  <label>To</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon2"><i class="fa fa-calendar"
+                          aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control bg-white" readonly="readonly" #drp="bsDatepicker" bsDatepicker
+                      [(ngModel)]="additionalWorked.endDate" name="endDate" autocomplete="off"
+                      [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY' }">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">      
+          <div class="col-sm-12">
+          <div class="jobListForm">
+            <div class="questionsForm text-right">
+              <button class="btn btn-blue-light lightBlueBtn" (click)=" addionalWorkedon()" type="submit">Apply
+                Filters</button>
+            </div>
+          </div>
+        </div>  
+        </div>
+        <!--  -->
+        <div class="machineTypeTable">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th><a (click)="Sorting('RequestedBy')">Requested By</a></th>
+                  <th><a (click)="Sorting('JobCode')">Job Code</a></th>
+                  <th><a (click)="Sorting('RequestDate')">Requested Date</a></th>
+                  <th><a (click)="Sorting('StartTime')">Start Time</a></th>
+                  <th><a (click)="Sorting('EndTime')">End Time</a></th>
+                  <th><a (click)="Sorting('AdditionalHours')">Additional Hours</a></th>
+                  <th><a (click)="Sorting('Status')">Status</a></th>
+                  <th><a (click)="Sorting('Description')">Description</a></th>
+                  <!-- <th class="text-center">Actions</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let workinghoursdata of extrahoursdata">
+                  <td>{{workinghoursdata.RequestedBy}}</td>
+                  <td>{{workinghoursdata.JobCode}}</td>
+                  <td>{{workinghoursdata.RequestDate | date: 'dd/MM/yyyy'}}</td>
+                  <td>{{workinghoursdata.StartTime | date: 'h:mm:ss a'}}</td>
+                  <td>{{workinghoursdata.EndTime | date: 'h:mm:ss a'}}</td>
+                  <td>{{workinghoursdata.AdditionalHours}}</td>
+                  <td>{{workinghoursdata.StatusName}}</td>
+                  <td>{{workinghoursdata.Description}}</td>
+                  <!-- <td align="middle">
+                    <div class="edit"><a title="Accept" (click)="updateHours(workinghoursdata,'Accepted')"><i
+                          class="fa fa-check green" aria-hidden="true"></i></a></div>
+                    <div class="cross"><a (click)="updateHours(workinghoursdata,'Declined')"><i title="Decline"
+                          class="fa fa-times red" aria-hidden="true"></i></a></div>
+                  </td> -->
+                </tr>
+                <tr class="text-center" *ngIf="!extrahoursdata">
+                  <td colspan="9"> No Record Found </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- <tr *ngIf="allItems > 10 && (MachineTypes| search: {MachineType: searchText}) ?.length > 0"> -->
+          <tr *ngIf="allItems > 10">
+            <td>
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" (click)="getPage(1)">First</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a class="page-link" (click)="getPage(pager.currentPage - 1)">Previous</a>
+                </li>
+                <li class="page-item" *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                  <a class="page-link" (click)="getPage(page)">{{page}}</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a class="page-link" (click)="getPage(pager.currentPage + 1)">Next</a>
+                </li>
+                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a class="page-link" (click)="getPage(pager.totalPages)">Last</a>
+                </li>
+              </ul>
+
+            </td>
+          </tr>
+        </div>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>

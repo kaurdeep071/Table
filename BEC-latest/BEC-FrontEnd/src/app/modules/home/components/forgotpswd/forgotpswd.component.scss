@@ -1,0 +1,237 @@
+@import "custom_variables.scss";
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+.login{
+background-image: url("/assets/images/loginbg.jpg");
+background-position: center center;
+background-repeat: no-repeat;
+background-size: cover;
+background-attachment: fixed;
+}
+.login {
+	position: relative;
+	&:before {
+		content: "";
+		background-color: #fafafa;
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
+		width: 40%;
+		@media screen and (max-width:576px)
+		{
+		display:none;
+		}
+	}
+	.loginDesc {
+    height: 100vh;
+    display: table;
+		@media screen and (max-width:576px)
+		{
+		height:auto;
+	    padding: 50px 0;
+		}
+		.loginDescInner
+		{
+			display: table-cell;
+			vertical-align: middle;
+			height:100%;
+			label
+			{
+				font-size: 25px;
+				line-height: normal;
+				color:#f5f6fa;
+				display: block;
+				font-family: 'open_sansregular';
+				margin: 0;
+                @media screen and (max-width:767px)
+				{
+				font-size: 18px;
+				}
+			}
+			h1
+			{
+			    font-size: 62px;
+				line-height: normal;
+				color: #fff;
+				text-transform: uppercase;
+				font-family: 'latoregular';
+				margin: 0 0 14px 0;
+				@media screen and (max-width: 1199px)
+				{
+				font-size: 50px;	
+				}
+				@media screen and (max-width: 1023px)
+				{
+				font-size:38px;	
+				}
+				@media screen and (max-width:991px)
+				{
+				font-size:38px;	
+				}
+				@media screen and (max-width:767px)
+				{
+				font-size:26px;	
+				}
+				@media screen and (max-width:400px)
+				{
+				font-size:30px;	
+				}
+				span{
+				color:#00acff;
+				}
+			}
+			p
+			{
+				font-size: 18px;
+				line-height: 28px;
+				font-family: 'open_sanslight';
+				color: #fff;
+				@media screen and (max-width: 1199px)
+				{
+				font-size: 16px;
+				line-height: 24px;	
+				}
+				@media screen and (max-width:1023px)
+				{
+				font-size: 14px;
+				line-height: 22px;	
+				}
+			}
+		}
+    }
+	.loginForm {
+    height: 100vh;
+    display: table;
+    width: 100%;
+    background-color: #fafafa;
+    text-align: center;
+	position:relative;
+	@media screen and (max-width:576px)
+	{
+	height: auto;
+	padding: 50px 0;
+	}
+    }
+	.loginFormInner
+	{
+	display: table-cell;
+	vertical-align: middle;
+	height:100%;
+	padding: 0 0 0 113px;
+	text-align: center;
+		@media screen and (max-width:1280px)
+		{
+		 padding: 0 0 0 88px;	
+		}
+		@media screen and (max-width: 1199px)
+		{
+		padding: 0 0 0 47px;	
+		}
+		@media screen and (max-width: 1023px)
+		{
+		padding: 0 0 0 32px;	
+		}
+		@media screen and (max-width:576px)
+		{
+				    padding: 0 15px;	
+		}
+		.loginLogo {
+		width:auto;
+		margin: 0 auto;
+			img{
+			max-width:100%;
+			}
+		}
+		@media screen and (max-width:1023px)
+		{
+			.col-sm-6.full {
+			flex: 0 0 50%;
+			max-width: 50%;
+		}
+		}
+		h2
+		{
+		font-family: 'open_sansbold';
+		font-size:20px;
+		line-height:35px;
+		color:#121529;
+		text-transform: uppercase;
+	 padding: 15px 0 0 0;
+		@media screen and (max-width:1023px)
+		{
+		font-size:32px;
+		line-height:38px;	
+		}
+		}
+	     p
+		{
+			font-family: 'open_sansbold';
+			font-size: 14px;
+			line-height: normal;
+			color: #121529;
+			text-transform: uppercase;
+			padding: 0 0 15px 0;
+		}
+		.logForm {
+		margin: 0 0 15px 0;
+		text-align: left;
+			h3 {
+				font-size: 18px;
+				text-align: left;
+				line-height: 38px;
+				font-family: 'open_sansregular';
+				@media screen and (max-width:1023px)
+				{
+				font-size: 16px;line-height: 30px;	
+				}
+				@media screen and (max-width:991px)
+				{
+				font-size: 14px;line-height: 30px;	
+				}
+				i {
+					padding: 0 7px 0 0;
+				}
+			}
+			input {
+				border:1px solid #d6d6d6;
+				height:48px;
+				border-radius:0px;
+				@media screen and (max-width:991px)
+				{
+				height: 40px;	
+				}
+				@media screen and (max-width:767px)
+				{
+				height:34px;	
+				}
+				&::placeholder{
+				font-size: 16px;
+				font-family: 'open_sansregular';
+				color:#bebdbd;
+					@media screen and (max-width:991px)
+					{
+					font-size: 14px;	
+					}
+				}
+			}
+		}
+		.logBtn
+		{
+			border-radius: 0px;
+			padding: 10px 37px;
+		}
+		
+	}
+    
+}
+span.help-block {
+	color: red;
+	display: none;
+}
+.has-error .help-block{
+	display: block;
+}

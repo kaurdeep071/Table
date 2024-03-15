@@ -1,0 +1,163 @@
+<div class="br-mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <!-- <div class="row row-sm">
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-info bg-info-orange rounded">
+          <div class="pad20 b-btm">
+            <h1>Performance</h1>
+            <p>20%</p>
+          </div>
+          <div class="updateTime">
+            <h2><i class="fa fa-clock-o"></i>Update 2:15 p.m</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-info bg-info-green rounded">
+          <div class="pad20 b-btm">
+            <h1>Completion Rate</h1>
+            <p>20%</p>
+          </div>
+          <div class="updateTime">
+            <h2><i class="fa fa-clock-o"></i>Update 2:15 p.m</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-info bg-info-purple rounded">
+          <div class="pad20 b-btm">
+            <h1>Satisfaction Rate</h1>
+            <p>20%</p>
+          </div>
+          <div class="updateTime">
+            <h2><i class="fa fa-clock-o"></i>Update 2:15 p.m</h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-info bg-info-blue rounded">
+          <div class="pad20 b-btm">
+            <h1>Progress Rate</h1>
+            <p>20%</p>
+          </div>
+          <div class="updateTime">
+            <h2><i class="fa fa-clock-o"></i>Update 2:15 p.m</h2>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="row row-sm mtop-30">
+      <div class="col-sm-4">
+        <div class="whiteBg rounded">
+          <h3>Jobs</h3>
+          <ul>
+            <li>In Progress Jobs <span class="badge badge-orange">{{JobsProgress}}</span></li>
+            <li>Completed Jobs<span class="badge badge-green">{{JobsCompleted}}</span></li>
+            <!-- <li>Halted Jobs<span class="badge badge-purple">{{JobsHaulted}}</span></li> -->
+          </ul>
+        </div>
+        <div class="whiteBg rounded">
+          <h3>Hours Spent Annually</h3>
+          <div class="values">
+            <h4 class="orange">32</h4>
+            <p>(Greater than 50KW and less than 200KW)</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-5">
+        <div class="whiteBg stages rounded">
+          <div class="captionWrapper">
+            <h3>
+              <span>Stages</span>
+              <span>In-Progress</span>
+            </h3>
+          </div>
+          <ul>
+            <li *ngFor="let jobstagecount of jobStageCount">
+              <h5>{{jobstagecount.StageId}}</h5>
+              <p>{{jobstagecount.Stage}}</p>
+              <a (click)="filteredData(jobstagecount.StageId)">
+              <span class="badge "
+                [ngClass]="{'badge-orange': jobstagecount.StageId==='Stage 1'||jobstagecount.StageId==='Stage 4',
+              'badge-green': jobstagecount.StageId==='Stage 2'||jobstagecount.StageId==='Stage 5',
+              'badge-purple': jobstagecount.StageId==='Stage 3'||jobstagecount.StageId==='Stage 6'}">{{jobstagecount.JobsProgress}}</span></a>
+              <div class="leftborder"></div>  
+            </li>
+          
+          </ul>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="whiteBg rounded">
+          <h3>Total Hours</h3>
+          <div class="values">
+            <h4 class="green">87</h4>
+            <p>Spent this week</p>
+          </div>
+        </div>
+        <div class="whiteBg rounded">
+          <h3>Total Jobs</h3>
+          <div class="values">
+            <h4 class="orange">{{jobCount}}</h4>
+            <p></p>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="col-sm-6" *ngIf="showAreachart">
+        <app-areachart (hideAreaChart)="showHideAreaChart()"></app-areachart>
+      </div>
+      <div class="col-sm-6" *ngIf="showMultiLinechart">
+        <app-multi-axis-line-char (hideMultiLineChart)="showHideMultiLineChart()"></app-multi-axis-line-char>
+      </div>
+      <div class="col-sm-6" *ngIf="showLinechart">
+        <app-linechart (hideLineChart)="showHideLineChart()"></app-linechart>
+      </div>
+      <div class="col-sm-6" *ngIf="showPiechart">
+        <app-piechart (hidePieChart)="showHidePieChart()"></app-piechart>
+      </div>
+      <div *ngIf="!showPiechart" class="col-sm-12"><div class="addWidget"><a (click)="widgetModal(WidgetPopup)" class="btn btn-blue-light lightBlueBtn"><i class="fa fa-plus" aria-hidden="true"></i>Add Widget</a></div></div>
+    </div>
+  </div>
+</div>
+
+<ng-template #WidgetPopup>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Add Widget</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="roleBox">
+            <div class="roleBoxInner">
+                <div class="row">    
+                <div class="col-sm-4">
+                    <div class="role">Widget</div>
+                </div>
+                <div class="col-sm-8">
+                <form [formGroup]="widgetForm">
+                  <div class="widgetForm" [ngClass]="{ 'has-error': formErrors.Widget }">
+                    <select class="form-control" formControlName="Widget">
+                      <option value="" selected>Select Widget</option>
+                      <option *ngFor="let widget of widgetlist" [value]="widget.WidgetCode">{{widget.WidgetName}}</option>
+                    </select>
+                    <span class="help-block" *ngIf="formErrors.Widget">
+                        {{ formErrors.Widget }}
+                      </span>
+                  </div>
+                  <div class="row">    
+                  <div class="col-sm-8">
+                      <button (click)="onSubmit()" class="btn btn-blue-light lightBlueBtn">Submit</button>
+                  </div>
+                </div>
+                </form>   
+                </div> 
+              </div>   
+                            
+              </div>
+            </div>
+          </div> 
+  
+  </ng-template>

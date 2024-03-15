@@ -1,0 +1,200 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<perfect-scrollbar class="panelWrapper">
+  <div class="br-mainpanel" style="position: relative;">
+    <div class="br-pagebody">
+      <div class="row row-sm">
+        <div class="machineBgBreadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">Manage</li>
+            <li class="breadcrumb-item active" aria-current="page">Update Answers</li>
+          </ol>
+        </div>
+        <div class="machineBg">
+          <div class="machineBox">
+            <div class="machineBoxInner">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="machineForm col-md-4" style="display: flex;">
+                    <label class="col-md-4">Job Code</label>
+                    <select class="col-md-4" class="form-control" id="jobCode" name="jobCode" [(ngModel)]="selectedJob"
+                      (change)="onJobChange()">
+                      <option [ngValue]="'default'" selected> Select Job Code</option>
+                      <option *ngFor="let job of newJobLists" [ngValue]="job">
+                        {{ job.JobCode }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="machineForm col-md-4" style="display: flex;">
+                    <label class="col-md-4">Stage Id</label>
+                    <select class="col-md-4" class="form-control" id="allStagesArray" [(ngModel)]="selectedStage"
+                      (change)="onStageChange()" name="allStagesArray">
+                      <option [ngValue]="'default'" selected> Select Stage</option>
+                      <option *ngFor="let stage of currentStagesArray" [ngValue]="stage">
+                        {{stage.name}}
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="machineForm col-sm-4">
+                    <div class="questionsForm text-right">
+                      <button class="btn btn-blue-light lightBlueBtn" type="submit" (click)="onSubmitJobDetails()">
+                        Apply Filters
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Job details -->
+        <div class="machineBg">
+          <div class="machineBox" [ngClass]="displayGridData?'':'dispnone'">
+            <div class="machineBoxInner">
+              <div class="row" *ngIf="jobDetails">
+
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Job Type :</b></label>&nbsp;
+                    <label>{{jobDetails.JobTypeName}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Machine Type :</b></label>&nbsp;
+                    <label>{{jobDetails.MachineTypeName}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Machine :</b></label>&nbsp;
+                    <label>{{jobDetails.MachineName}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Job Code :</b></label>&nbsp;
+                    <label>{{jobDetails.JobCodeName}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Client :</b></label>&nbsp;
+                    <label>{{jobDetails.ClientName}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Start Date :</b></label>&nbsp;
+                    <label>{{jobDetails.StartDate | date: 'dd/MM/yyyy'}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Stage :</b></label>&nbsp;
+                    <label>{{jobDetails.StageName}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!---->
+          <div class="hr"></div>
+          <!--showQuestionData-->
+          <div class="machineDataFound">
+            <div class="text-center noRecord"
+              *ngIf="(!loading && questionUpdateData && questionUpdateData.length == 0 && showQuestionData)">
+              <span>No data to display</span>
+            </div>
+            <div class="machineRow" *ngIf="(questionUpdateData && questionUpdateData.length > 0 && showQuestionData)">
+              <div class="headingTitle"><b> {{selectedStage.name}} </b></div>
+              <div class="scopestructure">
+                <div class="machineBox">
+                  <ng-template #nodeTemplateRefwp let-node="node" let-index="index" let-lastItem="lastItem">
+                    <div class="adminTemplate"
+                      *ngIf="(node.DataTypeName != 'input') || (node.DataTypeName == 'input' && node.QuestionText != '') || (node.QuestionTypeName == 'label')">
+                      <b
+                        *ngIf="(node.IsRoot && node.WorkProcedureRoot) && (selectedStage.name == CONSTANTS.workProcedure)">
+                        <hr class="m-0"><b></b> <br />
+                      </b>
+                      <b
+                        *ngIf="node.IsRoot && index > 0 && ((selectedStage.name == CONSTANTS.testing) || (selectedStage.name == CONSTANTS.packageAndDelivery))">
+                        <hr class="m-0"><b></b> <br />
+                      </b>
+                      <ng-container *ngIf="node.QuestionDeatilId  && node.IsSelected">
+                        <span *ngIf="(selectedStage.name == CONSTANTS.workProcedure) ">WP{{node.QuestionDeatilId}}
+                          &nbsp;</span>
+                        <span *ngIf="(selectedStage.name == CONSTANTS.testing)">T{{node.QuestionDeatilId}} &nbsp;</span>
+                        <span *ngIf="(selectedStage.name == CONSTANTS.packageAndDelivery)">PL{{node.QuestionDeatilId}}
+                          &nbsp;</span>
+                      </ng-container>
+                      <ng-container *ngIf="node.WorkProcedureRoot">
+                        <span>Template Name:</span>
+                      </ng-container>
+                      <label *ngIf="!(node.Option)" class="font-weight-bold detailNode">{{node.Question}} <span>
+                          <div *ngIf="(!node.WorkProcedureRoot)" class="edit"><a (click)="bindQuestionData(node)"><i
+                                class="fa fa-pencil black" title="Edit" aria-hidden="true"></i></a></div>
+                        </span> &nbsp; &nbsp;</label>
+                      <label *ngIf="(node.Option) && (node.IsSelected) && (node.DataTypeName=='radio button')"
+                        >{{node.Question}} &nbsp;
+                        &nbsp;</label>
+                      <label *ngIf="(node.Option) && (node.IsSelected) && (node.DataTypeName=='checkbox')"
+                       >{{node.Question}} &nbsp;
+                        &nbsp;</label>
+                      <label *ngIf="(node.Option) && (node.IsSelected) && node.DataTypeName=='input'">{{node.Question}}
+                        &nbsp; <span style="font-weight: lighter;font-style: italic;">{{node.QuestionText}}</span>
+                        &nbsp;</label>
+                        <span *ngIf="node.QuestionTypeName =='input'" style="font-weight: lighter;font-style: italic;">{{node.QuestionText}}</span>                
+                      <label *ngIf="(node.InputTypeName =='single') || (node.DataTypeName=='input')">
+                        &nbsp; &nbsp;</label>
+                      <span *ngIf="!(node.Option) && (node.IsSelected)">(
+                        {{node.TechnicianName}}
+                        | {{node.CreatedOn | date: 'dd/MM/yyyy HH:mm'}} )</span>
+                      <!-- <a *ngIf="node.Images != null && node.Images?.length > 0" [attr.data-object]="node.Images" class="text-primary viewimages"
+                        (click)="imagesModal(node.Images)" style="white-space: nowrap;">
+                        View Images</a> -->
+                      <div class="node__children" style="width: 100%; padding-left: 15px;display: block;" *ngIf="!(node.Option) || (node.Option && node.IsSelected && node.DataTypeName != 'input') 
+                          || (node.Option && node.IsSelected && node.DataTypeName == 'input'  && lastItem)">
+                        <div class="adminNodeWrapper" *ngFor="let child of node.Children; 
+                          let i = index;
+                          let first = first; 
+                          let last = last">
+                          <ng-template [ngTemplateOutlet]="nodeTemplateRefwp"
+                            [ngTemplateOutletContext]="{node: child, index:index,lastItem:last }">
+                          </ng-template>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                  <ng-template [ngTemplateOutlet]="nodeTemplateRefwp"
+                    [ngTemplateOutletContext]="{ node: question, index: i,lastItem:false }"
+                    *ngFor="let question of questionUpdateData; let i =index">
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</perfect-scrollbar>
+<ng-template #ImagesPopupTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Question Images</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-answered-images [objectdata]='objectlist' (performModalActions)="closeModal()"></app-answered-images>
+  </div>
+</ng-template>
+<div *ngIf="isEditMode">
+  <app-edit-popup [questionInfo]="questionData" [parentQuestionId]="parentQuestionId"
+    [selectedStageId]="selectedStageId" [stageId]="stageId" (closeEvent)="closeEditModel($event)"></app-edit-popup>
+</div>

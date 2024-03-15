@@ -1,0 +1,19 @@
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default whiteBg">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <h3 class="panel-title">
+            <span class="trashIcon"><i class="fa fa-trash" (click)="deleteWidget()"></i></span>
+          <a [ngClass]="[show_Graph?'':'collapsed']" data-toggle="collapse" data-parent="#accordion" (click)="showGraph()" aria-expanded="true"
+            aria-controls="collapseOne">
+            Performance Report
+          </a>
+        </h3>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in collapse" [ngClass]="[show_Graph?'show':'']" role="tabpanel"
+        aria-labelledby="headingOne">
+        <div class="grapgh">
+          <img src="assets/images/graph1.png" alt="image" title="graph" />
+        </div>
+      </div>
+    </div>
+  </div>

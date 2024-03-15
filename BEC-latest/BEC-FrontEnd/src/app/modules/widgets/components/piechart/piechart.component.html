@@ -1,0 +1,20 @@
+<div class="panel panel-default whiteBg">
+  <div class="panel-heading" role="tab" id="headingFour">
+    <h3 class="panel-title">
+        <!-- <span class="trashIcon">
+          <i class="fa fa-trash" (click)="deleteWidget()"></i></span> -->
+      <a [ngClass]="[show_Pie_Graph?'':'collapsed']" data-toggle="collapse" data-parent="#accordion" (click)="showPieGraph()" aria-expanded="false"
+        aria-controls="collapseFour">
+        
+        Job Completion Report
+      </a>
+     
+    </h3>
+  </div>
+  <div id="collapseFour" class="panel-collapse collapse collapse" [ngClass]="[show_Pie_Graph?'show':'']" role="tabpanel"
+    aria-labelledby="headingFour">
+    <div class="grapgh">
+      <canvas id='canvas'>{{chart}} </canvas>
+    </div>
+  </div>
+</div>

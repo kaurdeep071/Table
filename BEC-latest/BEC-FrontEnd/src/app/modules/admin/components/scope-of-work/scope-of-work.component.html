@@ -1,0 +1,277 @@
+<div *ngIf="loading">
+   <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" style="position: relative;">
+   <div class="br-pagebody">
+      <div class="row row-sm">
+
+         <!---->
+         <div class="machineBgBreadcrumb">
+            <ol class="breadcrumb">
+               <li class="breadcrumb-item">Manage</li>
+               <li class="breadcrumb-item active" aria-current="page">Scope Of Work</li>
+            </ol>
+         </div>
+
+
+         <div class="row" class="machineBg">
+            <div class="col-sm-2 left">
+               <!---->
+               <b><label>Select Job Code</label></b>
+            </div>
+            <div class="col-sm-4 left">
+               <select class="form-control" id="jobList" name="jobList" (change)="onChangeDropdown($event.target)">
+                  <option value=""> Select Job Code</option>
+                  <option *ngFor="let record of getFullJobList" [attr.data-Draft]="record.IsDraft"
+                     [value]="record.JobId">
+                     {{record.JobCode}}</option>
+               </select>
+
+               <!---->
+            </div>
+         </div>
+         <!---->
+         <div class="machineBg">
+            <!---->
+            <div class="machineBox" [ngClass]="displayGridData?'':'dispnone'">
+               <div class="machineBoxInner">
+                  <div class="row" *ngIf="jobData">
+
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Job Type :</b></label>&nbsp;
+                           <label>{{jobData.JobTypeName}}</label>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Machine Type :</b></label>&nbsp;
+                           <label>{{jobData.MachineTypeName}}</label>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Machine :</b></label>&nbsp;
+                           <label>{{jobData.MachineName}}</label>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Job Code :</b></label>&nbsp;
+                           <label>{{jobData.JobCodeName}}</label>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Client :</b></label>&nbsp;
+                           <label>{{jobData.ClientName}}</label>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Start Date :</b></label>&nbsp;
+                           <label>{{jobData.StartDate | date: 'dd/MM/yyyy'}}</label>
+                        </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="machineForm">
+                           <label><b>Stage :</b></label>&nbsp;
+                           <label>{{jobData.StageName}}</label>
+                        </div>
+                     </div>
+                     <!---->
+                  </div>
+               </div>
+            </div>
+            <!---->
+            <div class="hr"></div>
+            <!---->
+            <div *ngIf="jobActivityDetails != null && jobActivityDetails.length > 0">
+               <!-- <div class="alert alert-success alert-dismissible col-md-7" *ngIf="Success"
+                  style="display: inline-block;">
+                  <a class="close" data-dismiss="alert" aria-label="close" (click)="close()">&times;</a>
+                  <strong>Success!</strong> {{alertMessage}}
+               </div> -->
+               <button class="btn btn-blue-light float-right mb-2 col-md-2 ml-1" (click)="OnSubmit(0)"> Submit </button>
+               <button class="btn btn-success float-right mb-2 col-md-2" (click)="OnSubmit(1)"> Create Draft </button>
+            </div>
+            <div class="scopeStructure">
+               <!---->
+               <div class="col-md-12 dispFlexGridCols">
+                  <div class="width60"><b>Inspection Detail</b></div>
+                  <div class="width30"><b>Recommendation</b></div>
+                  <div class="width10"><b>Access to</b></div>
+               </div>
+               <!---->
+            </div>
+
+            <div class="scopeStructureInner">
+               <!-- <form> -->
+               <ng-template #nodeTemplateRef let-node="node" let-ParentQuestionId="ParentQuestionId"
+                  let-lastItem="lastItem" let-index="index">
+                  <!-- <div *ngIf="node.IsSelected"> -->
+                  <div *ngIf="node.IsRoot && index>0">
+                     <hr class="m-0" > <br />
+                  </div>
+                  <b *ngIf="node.IsRoot">&nbsp;{{index + 1}}. &nbsp;</b>
+                  <!-- {{lastItem | json}} -->
+                  <div class="rootdiv" [attr.data-index]="index" [attr.data-questioid]="node.QuestionId"
+                     [attr.data-parentquestionid]="node?.ParentQuestionId" [attr.data-parenttype]="node.ParentType"
+                     [attr.data-questiotype]="node.InputTypeName" [attr.data-datatype]="node.DataTypeName"
+                     [ngClass]="node.IsRoot?'width100 dispFlexGridCols':(node.Option?'test':'')">
+                     <div class="questionaire" style="margin-bottom: 5px;" [ngClass]="node.IsRoot?'width60 overscroll':''">
+                        <!-- <div class="row"> -->
+                        <label *ngIf="!(node.Option)" class="nodelabel"><strong>{{node.Question}}
+                           </strong>&nbsp;</label>
+                        <label>
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'number') && !(node.Option)" class="textinput form-control"
+                              type="number" [value]="node.QuestionText" (focus)="checkParentSelection()"
+                              (input)="onInputKeyPress()" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'boolean') && !(node.Option)" class="textinput form-control"
+                              type="text" [value]="node.QuestionText" (focus)="checkParentSelection()"
+                              (input)="onInputKeyPress()" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'currency') && !(node.Option)" class="textinput form-control"
+                              type="number" [value]="node.QuestionText" (focus)="checkParentSelection()" 
+                              (input)="onInputKeyPress()" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'date') && !(node.Option)" class="textinput form-control"
+                              bsDatepicker [bsConfig]="{ dateInputFormat: 'yyyy-MM-dd' }" [value]="node.QuestionText"
+                              (focus)="checkParentSelection()" (input)="onInputKeyPress()" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'image') && !(node.Option)" class="textinput form-control"
+                              type="file" (focus)="checkParentSelection()" (input)="onInputKeyPress()" [value]="node.QuestionText" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'phone no') && !(node.Option)" class="textinput form-control"
+                              type="number" (focus)="checkParentSelection()" (input)="onInputKeyPress()" [value]="node.QuestionText" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'text') && !(node.Option)" class="textinput form-control"
+                              type="text" (focus)="checkParentSelection()" (input)="onInputKeyPress()" [value]="node.QuestionText" [attr.data-stage]="node.Stage">
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'time') && !(node.Option)" (input)="onInputKeyPress()" class="textinput form-control"
+                              type="text" (focus)="checkParentSelection()" (input)="onInputKeyPress()" [value]="node.QuestionText" [attr.data-stage]="node.Stage">
+
+                           <!-- {{parent | json}} -->
+                           <input (click)="checkParentSelection()"
+                              *ngIf="(node.DataTypeName == 'radio button') && (node.Option)" 
+                              type="radio" (change)="OnQuestionChange()"
+                              name="option_{{parentType}}_{{ParentQuestionId}}_{{node.ParentQuestionId}}"
+                              [checked]="node?.IsSelected" [attr.data-stage]="node.Stage"/>
+                           <span *ngIf="(node.DataTypeName == 'radio button') && (node.Option)">
+                              {{node.Question}} </span>
+
+                           <input id="question_{{node.QuestionId}}" (click)="checkboxParentSelection()"
+                              *ngIf="(node.DataTypeName == 'checkbox') && (node.Option)" type="checkbox"
+                              [checked]="node?.IsSelected" [attr.data-stage]="node.Stage">
+                           <span *ngIf="(node.DataTypeName == 'checkbox') && (node.Option)"> {{node.Question}}
+                           </span>
+
+                           <span *ngIf="(node.DataTypeName == 'input') && (node.Option)"> {{node.Question}} </span>
+                           <input id="question_{{node.QuestionId}}"
+                              *ngIf="(node.DataTypeName == 'input') && (node.Option)" class="textinput" 
+                              type="text" [attr.data-stage]="node.Stage" [value]="node?.QuestionText? node?.QuestionText:''" 
+                              (input)="onInputKeyPress()" (focus)="checkParentSelection()">
+                        </label>
+                        <a *ngIf="((node.Option && node.NextQuestion > 0) && (!(node.Option) || (node.Option && node.DataTypeName != 'input')  || (node.Option && node.DataTypeName == 'input' && lastItem))) && node.Children == null"
+                           (click)=getQuestionOptionChilds(node.NextQuestion,node.JobId,node.TemplateId,node.QuestionId,node.QuestionDeatilId)>
+                           <strong [attr.data-nextquestion]="node.NextQuestion" [attr.data-jobid]="node.JobId" [attr.data-templateid]="node.TemplateId" [attr.data-questionid]="node.QuestionId" [attr.data-questiondeatilid]="node.QuestionDeatilId"> + </strong> 
+                        </a>
+                        &nbsp; <a *ngIf="node.Images != null && node.Images.length > 0  && (!(node.Option) || (node.Option && node.DataTypeName != 'input')  || (node.Option && node.DataTypeName == 'input' && lastItem))" [attr.data-object]="node.Images" class="text-primary" (click)="imagesModal(node.Images)" style="white-space: nowrap;"> View Images</a>
+                        
+                        <div class="row node__children display-block width100" id="children_{{node.NextQuestion}}_{{node.JobId}}_{{node.TemplateId}}_{{node.QuestionId}}_{{node.QuestionDeatilId}}"
+                           *ngIf="!(node.Option) || (node.Option && node.DataTypeName != 'input')  || (node.Option && node.DataTypeName == 'input' && lastItem)"
+                           style="padding-left: 40px;">
+                           <!-- <div id="children_{{node.NextQuestion}}_{{node.JobId}}_{{node.TemplateId}}_{{node.QuestionId}}_{{node.QuestionDeatilId}}" *ngIf="(node.Option && node.NextQuestion > 0)">
+                           </div> -->
+                           <ng-template ngFor let-child [ngForOf]="node.Children" let-islast="first">
+                              <ng-template [ngTemplateOutlet]="nodeTemplateRef"
+                                 [ngTemplateOutletContext]="{ node: child, ParentQuestionId: node.ParentQuestionId, index: index, lastItem: islast }">
+                              </ng-template>
+                           </ng-template>
+                        </div>
+                     </div>
+                     <div *ngIf="node?.IsRoot" class="SOWProcess" [ngClass]="node.IsRoot?'width40':''"
+                        style="float:right;display:flex;">
+                        <div class="padleft15" style="width: 65%;">
+                           <div class="padbottom15"> 
+                              <globalcode-dropdown id="Recommendation_{{index}}" className="form-control"
+                                 name="Recommendation" categoryName="Recommendation"
+                                 [value]="node?.WorkProcedureDetail?.Recommendation">
+                              </globalcode-dropdown>
+                           </div>
+                           <div class="padbottom15">
+                              <select id="TestingProcedure_{{index}}" name="TestingProcedure_{{index}}"
+                                 class="form-control" [value]="node?.WorkProcedureDetail?.TemplateId">
+                                 <option value="0" >Select work procedure</option>
+                                 <option *ngFor="let template of testingTemplates" [value]="template?.TemplateId">
+                                    {{template.TemplateName}}</option>
+                              </select>
+                           </div>
+
+                           <div class="padbottom15">
+                              <textarea class="commentbox" id="comment_{{index}}" rows="10" style="width: 100%;"
+                                 [value]="node?.WorkProcedureDetail?.Comment ? node?.WorkProcedureDetail?.Comment : ''"
+                                 placeholder="Add a comment.."></textarea>
+                           </div>
+
+                        </div>
+                        <div style="width: 35%;" class="padleft15">
+                           <div>
+                              <label class="checkbox"><input (click)="selectAccessBy($event)" type="radio"
+                                    class="AccessBy_{{index}}" name="AccessBy_{{index}}" data-value="T"
+                                    [checked]="node?.WorkProcedureDetail?.AccessBy=='T'? true:false" /><span
+                                    class="primary"> Technician</span>
+                              </label>
+                           </div>
+                           <div>
+                              <label class="checkbox"><input (click)="selectAccessBy($event)" type="radio"
+                                    class="AccessBy_{{index}}" name="AccessBy_{{index}}" data-value="C"
+                                    [checked]="node?.WorkProcedureDetail?.AccessBy=='C'? true:false" /><span
+                                    class="primary"> Customer</span>
+                              </label>
+                           </div>
+                           <div>
+                              <label class="checkbox"><input (click)="selectAccessBy($event)" type="radio"
+                                    class="AccessBy_{{index}}" name="AccessBy_{{index}}" data-value="B"
+                                    [checked]="node?.WorkProcedureDetail?.AccessBy=='B'? true:false" /><span
+                                    class="primary"> Both</span>
+                              </label>
+                           </div>
+                           <div class="padbottom15">
+                              <input type="number" class="orderbox" id="order_{{index}}"
+                                 [value]="node?.WorkProcedureDetail?.Order || index + 1" placeholder="Order no">
+                           </div>
+                        </div>
+                     </div>
+                     <!-- </div> -->
+                  </div>
+                  <!-- </div> -->
+               </ng-template>
+               <ng-template [ngTemplateOutlet]="nodeTemplateRef"
+                  [ngTemplateOutletContext]="{ node: data, parent: null, index: i, lastItem: false }"
+                  *ngFor="let data of jobActivityDetails; let i =index">
+               </ng-template>
+               <!-- </form> -->
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<div style="display: none;" id="childrenNodes">
+   <app-sowchild [jobActivityData]="childrenData" (sowChildComponentCall)="getChildOptionCall()" #childComponent></app-sowchild>
+</div>
+
+<ng-template #ImagesPopupTemplate>
+   <div class="modal-header">
+     <h4 class="modal-title pull-left">Question Images</h4>
+     <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="modal-body">
+     <app-answered-images [objectdata]='objectlist' (performModalActions)="closeModal()"></app-answered-images>
+   </div>
+ </ng-template>

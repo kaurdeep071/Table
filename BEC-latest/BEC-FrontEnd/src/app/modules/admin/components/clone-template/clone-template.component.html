@@ -1,0 +1,43 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<!---->
+<div class="modal-header">
+  <h4 class="modal-title">Clone Template</h4>
+  <button type="button" class="close" (click)="onCancel()">&times;</button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="cloneTemplateForm">
+    <div class="machineBox">
+      <div class="machineBoxInner">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="machineForm" [ngClass]="{ 'has-error': formErrors.TemplateCode }">
+              <label>Enter New Template Code</label>
+              <input type="text" class="form-control" placeholder="Template Code" formControlName=TemplateCode />
+              <span class="help-block" *ngIf="formErrors.TemplateCode">
+                {{ formErrors.TemplateCode }}
+              </span>
+            </div>
+            <div class="machineForm" [ngClass]="{ 'has-error': formErrors.TemplateName }">
+              <label>Enter New Template Name</label>
+              <input type="text" class="form-control" placeholder="Template Name" formControlName=TemplateName />
+              <span class="help-block" *ngIf="formErrors.TemplateName">
+                {{ formErrors.TemplateName }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-sm-12">
+            <div class="machineForm">
+              <a (click)="onCancel()" class="btn btn-blue-light lightBlueBtn">Cancel</a>&nbsp;
+              <a (click)="onSubmit()" class="btn btn-blue-light lightBlueBtn">Save</a>
+            </div>
+          </div>
+          <!---->
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!---->

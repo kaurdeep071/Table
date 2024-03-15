@@ -1,0 +1,162 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <div class="row row-sm">
+      <!---->
+      <div class="machineBgBreadcrumb">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item" [routerLink]="['/admin/profile']"><a>Home</a></li>
+             <li class="breadcrumb-item active" aria-current="page">Part Type</li>
+           </ol>
+          </div>
+      <div class="machineBg">
+        <!---->
+        <form [formGroup]="partsForm">
+          <div class="machineBox">
+            <div class="machineBoxInner">
+              <div class="row">
+                <!---->
+                <div class="col-sm-6">
+                  <div class="machineForm" [ngClass]="{ 'has-error': formErrors.PartName }">
+                    <label>Part <sup>*</sup></label>
+                    <input type="text" class="form-control" placeholder="Part Name" formControlName="PartName"
+                      (blur)="LogValidationError()" />
+                    <span class="help-block" *ngIf="formErrors.PartName">
+                      {{ formErrors.PartName }}
+                    </span>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-6">
+                  <div class="machineForm">
+                    <label>Parent Part</label>
+                    <select class="form-control" formControlName="PartParentId">
+                     <option value="-1" selected>Parent Part</option>
+                        <option *ngFor="let  part of Parentparts" [value]="part.PartId">{{part.PartName}}
+                                          </option>
+                    </select>
+                  </div>
+                </div> -->
+                <div class="col-sm-6">
+                  <div class="machineForm">
+                    <label>Description</label>
+                    <textarea class="form-control" placeholder="Type the description here" formControlName="Description"
+                     ></textarea>
+                   
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="machineForm">
+                    <span class="checkActive">Active</span><label class="checkbox"><input type="checkbox"
+                        formControlName="Active" /><span class="primary"></span></label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="machineForm rgt">
+                    <button (click)="onCancel()" class="btn btn-blue-light lightBlueBtn">Cancel</button>&nbsp;
+                    <button (click)="onSubmit()" class="btn btn-blue-light lightBlueBtn">Save</button>
+                  </div>
+                </div>
+                <!---->
+              </div>
+            </div>
+          </div>
+        </form>
+        <!---->
+        <div class="hr"></div>
+        <!---->
+        <div class="machineTypeSearch">
+            <input class="form-control" type="text" [(ngModel)]="searchText" placeholder="Enter text to search" aria-label="Search">
+        </div>
+        <div class="machineTypeTable">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th><a (click)="Sorting('PartName')">Part</a></th>
+                  <!-- <th><a (click)="Sorting('ParentPart')">Parent Part</a></th> -->
+                  <th><a (click)="Sorting('CreatedOn')">Created On</a></th>
+                  <th class="text-center"><a (click)="Sorting('IsActive')">Active</a></th>
+                  <th class="text-center">Actions</th>
+                  <th class="text-center">Attributes</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngIf="(parts | search: {PartName: searchText, ParentPart:searchText}) ?.length == 0">
+                      <!-- <tr> -->
+                      <td colspan="6" class="text-center">No record found</td>
+                   </tr>
+            
+                  <!-- <tr *ngIf="parts?.length == 0">
+                       
+                      <td colspan="5" class="text-center">No record found</td>
+                   </tr> -->
+                <tr *ngFor="let part of parts | search: {PartName: searchText, ParentPart:searchText};">
+                  <td>{{part.PartName}}</td>
+                  <!-- <td>{{part.ParentPart}}</td> -->
+                  <td>{{part.CreatedOn | date: 'dd/MM/yyyy'}}</td>
+                  <td align="middle"><a (click)="updatePartStatus(part.PartId,part.IsActive)"><i
+                    [attr.title]="part.IsActive? 'Active' : 'In Active'"  [ngClass]="part.IsActive? 'fa fa-check green' : 'fa fa-times red'" aria-hidden="true"></i></a>
+                  </td>
+                  <td align="middle">
+                    <div class="edit"><a (click)="bindPart(part)"><i class="fa fa-pencil black"
+                      title="Edit" aria-hidden="true"></i></a></div>
+                    <div class="cross"><a (click)="deletePart(part.PartId)"><i title="Delete" class="fa fa-trash red" 
+                          aria-hidden="true"></i></a></div>
+
+                  </td>
+                  <td align="middle"><a
+                      (click)="attributeModal(AttributePopupTemplate,part.PartId)"><img
+                      title="Manage"   src="assets/images/manage.png" alt="image" /></a>
+                    <span>({{part.AttributeRecordCount}})</span>
+                  </td>
+                </tr>
+
+
+              </tbody>
+            </table>
+          </div>
+          <!-- <tr *ngIf="allItems > 10 && (parts | search: {PartName: searchText, ParentPart:searchText}) ?.length > 0"> -->
+          <tr *ngIf="allItems > 10 && (searchText == null || searchText =='')">
+              <td>
+                 <!-- <div *ngFor="let item of pagedItems">{{item.name}}</div> -->
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                  <li class="page-item"  [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a class="page-link" (click)="getPage(1)">First</a>
+                  </li>
+                  <li class="page-item"  [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a class="page-link" (click)="getPage(pager.currentPage - 1)">Previous</a>
+                  </li>
+                  <li class="page-item"  *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                      <a class="page-link" (click)="getPage(page)">{{page}}</a>
+                  </li>
+                  <li class="page-item"  [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                      <a class="page-link" (click)="getPage(pager.currentPage + 1)">Next</a>
+                  </li>
+                  <li class="page-item"  [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                      <a class="page-link" (click)="getPage(pager.totalPages)">Last</a>
+                  </li>
+              </ul>
+            </td>
+            </tr>
+        </div>
+        <!---->
+      </div>
+      <!---->
+    </div>
+  </div>
+</div>
+
+<ng-template #AttributePopupTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Manage Attributes</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-attributes [object]='objectlist' (performModalActions)="closeModal()"></app-attributes>
+  </div>
+</ng-template>

@@ -1,0 +1,227 @@
+<div *ngIf="loading">
+   <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" style="position: relative;">
+   <div class="br-pagebody">
+      <div class="row row-sm">
+         <!---->
+         <div class="machineBg">
+            <h1>My Profile</h1>
+         </div>
+         <!---->
+         <div class="machineBg">
+            <!---->
+            <div class="panel-group">
+               <div class="panel panel-default">
+                  <div class="panel-heading">Profile Information
+                     <!-- <div class="editIcon"><i class="fa fa-pencil"></i></div> -->
+                  </div>
+                  <div class="panel-body">
+                     <div class="row">
+                        <div class="col-sm-4">
+                           <div class="profileImage">
+                              <img
+                                 [src]="profilePhoto && profilePhoto != ''? profilePhoto : 'assets/images/profileimage.jpg'"
+                                 alt="image" title="Upload Profile Photo" *ngIf="!newProfilePhoto.value"
+                                 (click)="newProfilePhoto.click()" />
+                              <img [src]="'data:image/png;base64,' + uploadedPhoto.userProfilePhoto" alt="image"
+                                 title="{{firstName.value}} {{lastName.value}}" *ngIf="newProfilePhoto.value"
+                                 (click)="newProfilePhoto.click()" />
+                           </div>
+                           <div class="profileDesc">
+                              <h2><b>User Name:</b> <span> {{firstName.value}} {{lastName.value}}</span></h2>
+                              <input type="file" style="display: none" accept="image/*" name="upload"
+                                 (change)="imgUpload($event)" #newProfilePhoto />
+                              <a href="javascript:void(0)" (click)="newProfilePhoto.click()"
+                                 *ngIf="!newProfilePhoto.value">Change Photo</a>
+                              <a href="javascript:void(0)" class="btn btn-primary" (click)="uploadProfilePhoto()"
+                                 *ngIf="newProfilePhoto.value">Upload Photo</a>
+                           </div>
+                        </div>
+                        <div class="col-sm-7 ml-auto">
+                           <form [formGroup]="ProfileForm">
+                              <div class="row">
+                                 <div class="col-sm-6">
+                                    <div class="machineForm" [ngClass]="{ 'has-error': formErrors.FirstName }">
+                                       <label>First Name</label>
+                                       <div class="input-group">
+                                          <div class="input-group-prepend">
+                                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-user"
+                                                   aria-hidden="true"></i></span>
+                                          </div>
+                                          <input type="text" class="form-control" placeholder="First Name"
+                                             (blur)="LogValidationError()" (keypress)="letterOnly($event)"
+                                             formControlName="FirstName" #firstName />
+
+                                       </div>
+                                       <span class="help-block" *ngIf="formErrors.FirstName">
+                                          {{ formErrors.FirstName }}
+                                       </span>
+                                    </div>
+                                 </div>
+
+                                 <div class="col-sm-6">
+                                    <div class="machineForm" [ngClass]="{ 'has-error': formErrors.LastName }">
+                                       <label>Last Name</label>
+                                       <div class="input-group">
+                                          <div class="input-group-prepend">
+                                             <span class="input-group-text" id="basic-addon2"><i class="fa fa-user"
+                                                   aria-hidden="true"></i></span>
+                                          </div>
+                                          <input type="text" class="form-control" placeholder="Last Name"
+                                             (blur)="LogValidationError()" formControlName="LastName" #lastName>
+
+                                       </div>
+                                       <span class="help-block" *ngIf="formErrors.LastName">3
+                                          {{ formErrors.LastName }}
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="machineForm" [ngClass]="{ 'has-error': formErrors.Email }">
+                                       <label>Email</label>
+                                       <div class="input-group">
+                                          <div class="input-group-prepend">
+                                             <span class="input-group-text" id="basic-addon4"><i class="fa fa-envelope"
+                                                   aria-hidden="true"></i></span>
+                                          </div>
+                                          <input type="text" class="form-control" placeholder="abc@gmail.com"
+                                             formControlName="Email" (blur)="LogValidationError()" readonly />
+
+                                       </div>
+                                       <span class="help-block" *ngIf="formErrors.Email">
+                                          {{ formErrors.Email }}
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="machineForm" [ngClass]="{ 'has-error': formErrors.Dob }">
+                                       <label>Date of Birth </label>
+                                       <div class="input-group">
+                                          <div class="input-group-prepend">
+                                             <span class="input-group-text" id="basic-addon3"><i class="fa fa-calendar"
+                                                   aria-hidden="true"></i></span>
+                                          </div>
+                                          <!-- <input type="text" class="form-control" bsDatepicker
+                                             [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY' }" placeholder="MM/DD/YYYY"
+                                             (blur)="LogValidationError()" formControlName="Dob"> -->
+
+                                          <input type="text" class="form-control bg-white" readonly="readonly"
+                                             bsDatepicker [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+                                             placeholder="MM/DD/YYYY" (blur)="LogValidationError()"
+                                             formControlName="Dob">
+                                       </div>
+                                       <span class="help-block" *ngIf="formErrors.Dob">
+                                          {{ formErrors.Dob }}
+                                       </span>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="machineForm" [ngClass]="{ 'has-error': formErrors.Position }">
+                                       <label>Position</label>
+                                       <globalcode-dropdown className="form-control" categoryName="Position"
+                                          name="Position" formControlName="Position"></globalcode-dropdown>
+                                       <span class="help-block" *ngIf="formErrors.Position">
+                                          {{ formErrors.Position }}
+                                       </span>
+                                    </div>
+                                 </div>
+
+                                 <div class="col-sm-12">
+                                    <div class="machineForm rgt">
+                                       <button type="submit" (click)="onSubmit()"
+                                          class="btn btn-blue-light lightBlueBtn">Save</button>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <!-- <div class="col-sm-12">
+                              <div class="loginBtn text-left"><button type="submit" (click)="onSubmit()" class="btn btn-blue logBtn">Save</button></div>
+                            </div> -->
+                           </form>
+                        </div>
+
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <!---->
+            <!---->
+            <div class="panel-group">
+               <div class="panel panel-default">
+                  <div class="panel-heading">Change Password</div>
+
+                  <!-- <div [ngClass]="passwordMessageObject.class" *ngIf="passwordMessageObject">
+                        {{passwordMessageObject.message}}
+                     </div> -->
+                  <div class="panel-body">
+                     <div class="row">
+                        <div class="col-sm-5">
+                           <div class="thumbImage">
+                              <img src="assets/images/lockimage.png" alt="image" title="lock" />
+                           </div>
+                        </div>
+                        <div class="col-sm-7">
+
+                           <form id="passwordform" #passwordform="ngForm"
+                              (ngSubmit)="passwordform.valid && changePassword(passwordform);" novalidate>
+                              <div class="row">
+                                 <div class="col-sm-12">
+                                    <div class="machineForm">
+                                       <label class="control-label">Old Password</label>
+                                       <input type="password" name="old_password" class="form-control" (keydown.space)="$event.preventDefault()"                                          placeholder="Old Password" [(ngModel)]="changePasswordForm.oldPassword"
+                                          #old_password="ngModel" required>
+                                       <div *ngIf="passwordform.submitted && !old_password.valid" class="error">
+                                          {{ changePasswordValidationMessage.oldPassword.required }}</div>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="machineForm">
+                                       <label class="control-label">New Password</label>
+                                       <input type="password" name="new_password" class="form-control"
+                                          placeholder="New Password" [(ngModel)]="changePasswordForm.newPassword"
+                                          minlength="8" #new_password="ngModel" required  (keydown.space)="$event.preventDefault()" >
+                                       <div *ngIf="passwordform.submitted && new_password.errors?.required"
+                                          class="error">{{ changePasswordValidationMessage.newPassword.required}}</div>
+                                       <div
+                                          *ngIf="passwordform.submitted && new_password.errors?.minlength && !new_password.errors?.required"
+                                          class="error">{{ changePasswordValidationMessage.newPassword.minlength}}</div>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="machineForm">
+                                       <label class="control-label">Confirm Password</label>
+                                       <input type="password" name="confirm_password" class="form-control"
+                                          placeholder="Confirm Password"  (keydown.space)="$event.preventDefault()" 
+                                          [(ngModel)]="changePasswordForm.confirmPassword" #confirm="ngModel"
+                                          appConfirmEqualValidator="new_password" required>
+                                       <div *ngIf="passwordform.submitted && confirm.errors?.required" class="error">
+                                          {{ changePasswordValidationMessage.confirmPassword.required }}</div>
+                                       <div
+                                          *ngIf="passwordform.submitted && confirm.errors?.notEqual && !confirm.errors?.required"
+                                          class="error">{{ changePasswordValidationMessage.confirmPassword.notEqual }}
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="machineForm rgt">
+                                       <button type="submit" class="btn btn-blue-light lightBlueBtn">Save</button>
+                                    </div>
+                                 </div>
+                                 <!-- <div class="col-sm-12">
+                              <div class="loginBtn text-left"><button type="submit" (click)="onSave()" class="btn btn-blue logBtn">Change</button></div>
+                            </div> -->
+                              </div>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!---->
+      </div>
+      <!---->
+   </div>
+</div>

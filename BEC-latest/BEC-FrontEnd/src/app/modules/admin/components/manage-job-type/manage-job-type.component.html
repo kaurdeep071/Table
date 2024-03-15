@@ -1,0 +1,133 @@
+<div *ngIf="loading">
+   <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" style="position: relative;">
+   <div class="br-pagebody">
+      <div class="row row-sm">
+         <!---->
+         <div class="machineBgBreadcrumb">
+            <ol class="breadcrumb">
+               <li class="breadcrumb-item" [routerLink]="['/admin/profile']"><a>Home</a></li>
+               <li class="breadcrumb-item active" aria-current="page">Job Type</li>
+            </ol>
+         </div>
+         <!---->
+         <div class="jobBg">
+            <!---->
+            <form [formGroup]="jobTypeForm">
+               <div class="jobBox">
+                  <div class="jobBoxInner">
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="jobForm" [ngClass]="{ 'has-error': formErrors.JobType }">
+                              <label>Job Type<sup>*</sup> </label>
+                              <input type="text" class="form-control" formControlName="JobType" placeholder="Job Type"
+                                 (blur)="LogValidationError()" />
+                              <span class="help-block" *ngIf="formErrors.JobType">
+                                 {{ formErrors.JobType }}
+                              </span>
+                           </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="jobForm">
+                              <label>Description</label>
+                              <textarea class="form-control" formControlName="JobDescription"
+                                 placeholder="Type the description here"></textarea>
+
+                           </div>
+                        </div>
+                        <div class="col-sm-6">
+                           <div class="jobForm">
+                              <span class="checkActive">Active</span><label class="checkbox"><input type="checkbox"
+                                    formControlName="Active" /><span class="primary"></span></label>
+                           </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                           <div class="jobForm rgt">
+                              <button (click)="onCancel()" class="btn btn-blue-light lightBlueBtn">Cancel</button>
+                              &nbsp;
+                              <button (click)="onSubmit()" class="btn btn-blue-light lightBlueBtn">Save</button>
+                           </div>
+                        </div>
+                        <!---->
+                     </div>
+                  </div>
+               </div>
+            </form>
+            <!---->
+            <div class="hr"></div>
+            <!---->
+            <div class="jobTypeSearch">
+               <input class="form-control" type="text" [(ngModel)]="searchText" placeholder="Enter text to search"
+                  aria-label="Search">
+               <!-- <button class="btn  btn-blue-light lightBlueBtn btn-sm my-0 ml-sm-2"
+                  type="submit">Search</button> -->
+               <!-- </form> -->
+            </div>
+            <!---->
+            <div class="jobTypeTable">
+               <div class="table-responsive">
+                  <table class="table table-bordered">
+                     <thead>
+                        <tr>
+                           <th><a (click)="Sorting('JobType')">Job Type</a></th>
+                           <th><a (click)="Sorting('CreatedOn')">Created On</a></th>
+                           <th class="text-center"><a (click)="Sorting('IsActive')">Active</a></th>
+                           <th class="text-center">Actions</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr *ngIf="(JobTypes | search: {JobType: searchText}) ?.length == 0">
+                           <td colspan="4" class="text-center">No record found</td>
+                        </tr>
+
+                        <tr *ngFor="let jobtype of JobTypes | search: {JobType: searchText};">
+
+                           <td>{{jobtype.JobType}}</td>
+
+                           <td>{{jobtype.CreatedOn | date: 'dd/MM/yyyy'}}</td>
+                           <td align="middle"><a (click)="updateJobTypeStatus(jobtype.JobTypeId,jobtype.IsActive)"><i
+                                    [ngClass]="jobtype.IsActive? 'fa fa-check green' : 'fa fa-times red'"
+                                    [attr.title]="jobtype.IsActive? 'Active' : 'In Active'" aria-hidden="true"></i></a>
+                           </td>
+                           <td align="middle">
+                              <div class="edit"><a (click)="bindJobType(jobtype)"><i class="fa fa-pencil black"
+                                       title="Edit" aria-hidden="true"></i></a></div>
+                              <div class="cross"><a (click)="deleteJobType(jobtype.JobTypeId)"><i title="Delete"
+                                       class="fa fa-trash red" aria-hidden="true"></i></a></div>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <!-- <tr *ngIf="allItems > 10 && (JobTypes | search: {JobType: searchText}) ?.length > 0"> -->
+               <tr *ngIf="allItems > 10 && (searchText == null || searchText =='')">
+                  <td>
+                     <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                        <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                           <a class="page-link" (click)="getPage(1)">First</a>
+                        </li>
+                        <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                           <a class="page-link" (click)="getPage(pager.currentPage - 1)">Previous</a>
+                        </li>
+                        <li class="page-item" *ngFor="let page of pager.pages"
+                           [ngClass]="{active:pager.currentPage === page}">
+                           <a class="page-link" (click)="getPage(page)">{{page}}</a>
+                        </li>
+                        <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                           <a class="page-link" (click)="getPage(pager.currentPage + 1)">Next</a>
+                        </li>
+                        <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                           <a class="page-link" (click)="getPage(pager.totalPages)">Last</a>
+                        </li>
+                     </ul>
+                  </td>
+               </tr>
+            </div>
+            <!---->
+         </div>
+         <!---->
+      </div>
+   </div>
+</div>

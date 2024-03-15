@@ -1,0 +1,72 @@
+<div *ngIf="loading">
+<app-loading-screen></app-loading-screen>
+</div>
+<section class="login">
+  <div class="container">
+    <div class="row">
+      <!---->
+      <div class="col-md-7 col-sm-6">
+        <div class="loginDesc">
+          <div class="loginDescInner">
+            <label>Welcome to</label>
+            <h1>BEC <span>Engineering</span></h1>
+            <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical
+              Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at
+              Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 col-sm-6">
+        <div class="loginForm">
+          <div class="loginFormInner">
+            <div class="loginLogo"><img src="assets/images/logo.png" alt="image" title="Logo" /></div>
+            <h2>Login</h2>
+            <div [ngClass]="messageObject.class" *ngIf="messageObject">
+                {{messageObject.message}}
+              </div>
+            <form [formGroup]="LoginForm">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="logForm" [ngClass]="{ 'has-error': formErrors.Email }">
+                    <div class="form-group" >
+                    <label for="Email" class="control-label"><h3><i class="fa fa-user" aria-hidden="true"></i>Email</h3></label>
+                    <input type="text" class="form-control" placeholder="Email"  formControlName="Email"
+                         (blur)="LogValidationError()"/>
+                    <span class="help-block" *ngIf="formErrors.Email">
+                      {{ formErrors.Email }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+                <div class="col-sm-12">
+                  <div class="logForm" [ngClass]="{ 'has-error': formErrors.Password }">
+                    <h3><i class="fa fa-lock" aria-hidden="true"></i>Password</h3>
+                    <input type="password" class="form-control" placeholder="Password" formControlName="Password" 
+                       (blur)="LogValidationError()"/>
+                    <span class="help-block" *ngIf="formErrors.Password">
+                      {{ formErrors.Password }}
+                    </span>
+                  </div>
+                </div>
+                <div class="col-sm-6 full" >
+                  <div class="remember text-left">
+                    <input type="checkbox" [(ngModel)]="rememberMe"  [ngModelOptions]="{standalone: true}" />Remember Me
+                  </div>
+                </div>
+                <div class="col-sm-6 full">
+                  <div class="forgotpassword text-right">
+                    <a  [routerLink]="['/forgotPassword']">Forgot Password</a> 
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                  <div class="loginBtn text-left full-width"><button type="submit" (click)="onSubmit()" class="btn btn-blue logBtn">Login</button></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!---->
+    </div>
+  </div>
+</section>

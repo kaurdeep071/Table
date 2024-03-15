@@ -1,0 +1,541 @@
+<div *ngIf="loading">
+  <app-loading-screen></app-loading-screen>
+</div>
+<div class="br-mainpanel" id="mainpanel" style="position: relative;">
+  <div class="br-pagebody">
+    <div class="row row-sm">
+      <div class="machineBgBreadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Reports</li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <b>JOB DETAILS REPORT</b>
+          </li>
+        </ol>
+        <div class="print">
+          <button class="btn btn-blue-light lightBlueBtn" (click)="captureScreen()">Generate PDF</button>
+        </div>
+      </div>
+      <div class="machineBg">
+        <div class="machineBox">
+          <div class="machineBoxInner">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="multiCheck">
+                  <label>Action</label><br />
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="equipmentIdentification"
+                      (click)="checkBox(CONSTANTS.equipmentIdentification)" #equipmentIdentificationControl="ngModel" />
+                    <span class="primary"></span>
+                  </label>
+                  <span class="checkActive">Equipment Identification</span>
+                </div>
+                <div class="multiCheck">
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="equipmentInspection"
+                      (click)="checkBox(CONSTANTS.equipmentInspection)" #equipmentInspectionControl="ngModel" />
+                    <span class="primary"></span>
+                  </label>
+                  <span class="checkActive">Equipment Inspection</span>
+                </div>
+                <div class="multiCheck">
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="scopeOFWork"
+                      (click)="checkBox(CONSTANTS.scopeOFWork)" #scopeOFWorkControl="ngModel" />
+                    <span class="primary"></span>
+                  </label>
+                  <span class="checkActive">Scope of work</span>
+                </div>
+                <div class="multiCheck">
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="workProcedure"
+                      (click)="checkBox(CONSTANTS.workProcedure)" #procedureControl="ngModel" />
+                    <span class="primary"></span>
+                  </label>
+                  <span class="checkActive">Work Procedure</span>
+                </div>
+                <div class="multiCheck">
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="testing" #testingControl="ngModel"
+                      (click)="checkBox(CONSTANTS.testing)" />
+                    <span class="primary"></span>
+                  </label>
+                  <span class="checkActive">Testing</span>
+                </div>
+                <div class="multiCheck">
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="packageAndDelivery"
+                      (click)="checkBox(CONSTANTS.packageAndDelivery)" #packageAnddeliveryControl="ngModel" />
+                    <span class="primary"></span>
+                  </label>
+                  <span class="checkActive">Package and delivery</span>
+                </div>
+                <div class="multiCheck">
+                  <label class="checkbox"><input type="checkbox" [(ngModel)]="jobActivity"
+                      (click)="checkBox(CONSTANTS.jobActivity)" #jobActivityControl="ngModel" /><span
+                      class="primary"></span>
+                  </label>
+                  <span class="checkActive">Job Activity</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="machineBg">
+        <div class="machineBox">
+          <div class="machineBoxInner">
+            <div class="row">
+              <div class="col-sm-12" style="display: flex;">
+                <div class="machineForm col-md-4" style="display: flex;">
+                  <label class="col-md-4">Job Code</label>
+                  <select class="col-md-4" class="form-control" id="jobCode" name="jobCode"
+                    (change)="onJobChange($event)" [(ngModel)]="ScopeOfWorkForm.jobCode" #jobcode="ngModel"
+                    [value]="ScopeOfWorkForm.jobCode">
+                    <option [attr.data-stage]="1" value=""> Select Job Code</option>
+                    <option *ngFor="let record of newJobLists" [attr.data-stage]="record.StageId" [value]="record.JobId"
+                      [attr.data-jobname]="record.JobCode">
+                      {{ record.JobCode }}</option>
+                  </select>
+                </div>
+
+                <div class="machineForm col-md-4" style="display: flex;">
+                  <label class="col-md-4">Filter List</label>
+                  <select class="col-md-4" class="form-control" id="Filterlist" name="Filterlist"
+                    (change)="applyFilters($event)">
+                    <option *ngFor="let filter of filtersList" [value]="filter.id" [attr.selected]="filter.id == 998">
+                      {{ filter.name }}</option>
+                  </select>
+                </div>
+                <div class="col-sm-4">
+                  <div class="questionsForm text-right">
+                    <button class="btn btn-blue-light lightBlueBtn" type="submit" (click)="onChangeDropdown()">
+                      Apply Filters
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="contentToConvert" class="machineBg">
+        <div class='header'>
+          <div class="col-md-12 text-center companylogo" style="display: none;">
+            <img _ngcontent-c1="" alt="image" class="brand-logo" src="assets/images/dashboardlogo.png">
+          </div>
+        </div>
+
+        <div class="machineRow" *ngIf="jobData != null && jobData.length>0">
+          <div class="headingTitle"><b>Job Details</b></div>
+          <div class="machineBox" *ngFor="let list of jobData">
+            <div class="machineBoxInner">
+              <div class="row">
+                <!---->
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Job Type : </b></label>
+                    <label>{{ list.JobTypeName }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Machine Type : </b></label>
+                    <label>&nbsp;&nbsp;{{ list.MachineTypeName }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Machine : </b></label>
+                    <label>&nbsp;{{ list.MachineName }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Job Code : </b></label>
+                    <label>{{ list.JobCodeName }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Client : </b></label>
+                    <label> {{ list.ClientName }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Start Date : </b></label>
+                    <label> {{ list.StartDate | date }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Stage : </b></label>
+                    <label>{{ list.StageName }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Total Hours : </b></label>
+                    <label> {{ list.TotalHours }}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Segment : </b></label>
+                    <label> {{list.Segment}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Sub-Segment :  </b></label>
+                    <label> &nbsp; &nbsp; {{list.Subsegment}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="machineForm">
+                    <label><b>Client-Feedback :  </b></label>
+                    <label> &nbsp; &nbsp; {{list.Feedback}}</label>
+                  </div>
+                </div>
+                <!---->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="machineRow" *ngIf="jobActivity && jobsActivitydata!=null && jobsActivitydata.length>0">
+          <div class="headingTitle"><b>Job Activity</b></div>
+          <div class="procedureTypeTable">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Stage</th>
+                    <th>Action</th>
+                    <th>Date/Time</th>
+                    <th>Action By</th>
+                    <th>Hours Spent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let jobdetailsdata of jobsActivitydata">
+                    <td>{{ jobdetailsdata.StageName }}</td>
+                    <td>{{ jobdetailsdata.ActionName }}</td>
+                    <td>{{ jobdetailsdata.ActionTime | date:'dd/MM/yyyy, h:mm a' }}</td>
+                    <td>{{ jobdetailsdata.UserName }}</td>
+                    <td>{{ jobdetailsdata.Hours }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="machineRow" *ngIf="equipmentIdentification && Attributesdata!=null && Attributesdata.length>0">
+          <div class=" headingTitle"><b>Equipment Identification</b></div>
+          <div class="machineBox">
+            <div class="machineBoxInner">
+              <div class="row">
+                <!---->
+                <!-- {{Attributesdata | json}} -->
+                <div *ngFor="let listdata of Attributesdata">
+                  <div
+                    *ngIf="listdata.ObjectAttributeCollectionDeatilList != null && listdata.ObjectAttributeCollectionDeatilList.length > 0"
+                    class="p-4 machineForm">
+                    <!---->
+                    <div class="table-responsive">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th colspan="2" class="text-center">{{listdata.AttributeName}}</th>
+                          </tr>
+                        </thead>
+                        <!-- {{listdata.ObjectAttributeCollectionDeatilList|json}} -->
+                        <tbody *ngFor="let data of listdata.ObjectAttributeCollectionDeatilList">
+                          <tr *ngIf="data.AttributeCollectionName == 'dropdown'">
+                            <td>
+                              {{data.AttributeCollectionDetailValue}}&nbsp; &nbsp;
+                            </td>
+                          </tr>
+                          <tr
+                            *ngIf="data.AttributeCollectionName != 'image' && data.AttributeCollectionName != 'dropdown'">
+                            <!-- <tr > -->
+                            <td *ngIf="data.AttributeCollectionId != -1"> {{data.AttributeCollectionName}}
+                            </td>
+                            <!-- </tr> -->
+                            <td *ngIf="data.AttributeCollectionDetailValue != ''">
+                              {{data.AttributeCollectionDetailValue}}</td>
+                          </tr>
+                          <tr *ngIf="data.AttributeCollectionName == 'image'">
+                            <td>
+                              <img [src]="api +data.AttributeCollectionDetailValue" />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="machineRow"
+          *ngIf="equipmentInspection && inspectiondetaildata!=null && inspectiondetaildata.length>0">
+          <div class="headingTitle"><b>Equipment Inspection</b></div>
+          <div class="inspectionstructure">
+            <div class="machineBox">
+              <ng-template #nodeTemplateRef let-node="node" let-index="index" let-lastItem="lastItem">
+                <div *ngIf="(node.IsSelected && node.DataTypeName != 'input') || 
+                (node.IsSelected && node.DataTypeName == 'input' && (node.QuestionText != '' || node.Children != null)) || 
+                (node.QuestionTypeName == 'label')">
+                  <b *ngIf="node.IsRoot && index > 0">
+                    <hr class="m-0"> <br />
+                  </b>
+                  <span>EI{{node.QuestionDeatilId}} &nbsp;</span>
+                  <label *ngIf="!(node.Option)" class="font-weight-bold">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.Option) && (node.IsSelected)"
+                    [ngClass]="node.DataTypeName=='input'?'font-weight-bold':''">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.InputTypeName =='single') || (node.DataTypeName=='input')">{{node.QuestionText}}
+                    &nbsp; &nbsp;</label> <span *ngIf="!(node.Option) && (node.IsSelected)">( {{node.TechnicianName}} |
+                    {{node.CreatedOn | date: 'dd/MM/yyyy HH:mm'}} )</span>
+                  &nbsp; <a *ngIf="node.Images != null && node.Images?.length > 0" [attr.data-object]="node.Images"
+                    class="text-primary viewimages" (click)="imagesModal(node.Images)" style="white-space: nowrap;">
+                    View Images</a>
+
+                  <div class="node__children" style="width: 100%; padding-left: 15px;display: block;" *ngIf="!(node.Option) || (node.Option && node.IsSelected && node.DataTypeName != 'input') 
+                    || (node.Option && node.IsSelected && node.DataTypeName == 'input'  && lastItem)">
+                    <div *ngFor="let child of node.Children; 
+                      let i = index;
+                      let first = first; 
+                      let last = last">
+                      <ng-template [ngTemplateOutlet]="nodeTemplateRef"
+                        [ngTemplateOutletContext]="{node: child, index:index,lastItem:last }">
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template [ngTemplateOutlet]="nodeTemplateRef"
+                [ngTemplateOutletContext]="{ node: inspectiondata, index: i,lastItem:false}"
+                *ngFor="let inspectiondata of inspectiondetaildata; let i =index">
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="machineRow" *ngIf="scopeOFWork && scopeofworkdata!=null && scopeofworkdata.length>0">
+          <div class="headingTitle"><b>Scope of Work</b></div>
+          <div class="scopestructure">
+            <div class="machineBox">
+              <ng-template #nodeTemplateRefsow let-node="node" let-index="index" let-lastItem="lastItem">
+                <div
+                  *ngIf="(node.IsSelected && node.DataTypeName != 'input') || (node.IsSelected && node.DataTypeName == 'input') || (node.QuestionTypeName == 'label')">
+                  <b *ngIf="node.IsRoot && index > 0">
+                    <hr class="m-0"> <br />
+                  </b>
+                  <span>SW{{node.QuestionDeatilId}} &nbsp;</span>
+                  <div style="width: 100%;display: flex;" *ngIf="!(node.Option == true && node.IsSelected == false)">
+                    <div [ngClass]="node.IsRoot?'width75':'width100'">
+
+                      <label *ngIf="!(node.Option)" class="font-weight-bold">{{node.Question}} &nbsp; &nbsp;</label>
+                      <label *ngIf="(node.Option) && (node.IsSelected)"
+                        [ngClass]="node.DataTypeName=='input'?'font-weight-bold':''">{{node.Question}} &nbsp;
+                        &nbsp;</label>
+                      <label
+                        *ngIf="(node.InputTypeName =='single') || (node.DataTypeName=='input')">{{node.QuestionText}}
+                        &nbsp; &nbsp;</label> <span *ngIf="!(node.Option) && (node.IsSelected)">(
+                        {{node.TechnicianName}} | {{node.CreatedOn | date: 'dd/MM/yyyy HH:mm'}} )</span>
+                      &nbsp; <a *ngIf="node.Images != null && node.Images?.length > 0" [attr.data-object]="node.Images"
+                        class="text-primary viewimages" (click)="imagesModal(node.Images)" style="white-space: nowrap;">
+                        View Images</a>
+                      <div class="node__children" style="width: 100%; padding-left: 15px;display: block;" *ngIf="!(node.Option) || (node.Option && node.IsSelected && node.DataTypeName != 'input') 
+                        || (node.Option && node.IsSelected && node.DataTypeName == 'input'  && lastItem)">
+                        <div *ngFor="let child of node.Children; 
+                      let i = index;
+                      let first = first; 
+                      let last = last">
+                          <ng-template [ngTemplateOutlet]="nodeTemplateRefsow"
+                            [ngTemplateOutletContext]="{node: child, index:index,lastItem:last }">
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="node.IsRoot" [ngClass]="node.IsRoot?'width25':''" style="float:right;display: block;">
+
+                      <div>
+                        <label><b>Recommendation </b> {{node.WorkProcedureDetail.Recommendation}}</label>
+                      </div>
+                      <div *ngIf="node.WorkProcedureDetail.Comment != ''">
+                        <label><b>Comment </b> {{node.WorkProcedureDetail.Comment}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template [ngTemplateOutlet]="nodeTemplateRefsow"
+                [ngTemplateOutletContext]="{ node: scopedata, index: i,lastItem:false }"
+                *ngFor="let scopedata of scopeofworkdata; let i =index">
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="machineRow" *ngIf="workProcedure && workproceduredata!=null && workproceduredata.length>0">
+          <div class="headingTitle"><b>Work procedure</b></div>
+          <div class="scopestructure">
+            <div class="machineBox">
+              <ng-template #nodeTemplateRefwp let-node="node" let-index="index" let-lastItem="lastItem">
+                <div
+                  *ngIf="(node.DataTypeName != 'input') || (node.DataTypeName == 'input' && node.QuestionText != '') || (node.QuestionTypeName == 'label')">
+                  <b *ngIf="node.IsRoot && index > 0">
+                    <hr class="m-0"> <br />
+                  </b>
+                  <span>WP{{node.QuestionDeatilId}} &nbsp;</span>
+                  <label *ngIf="!(node.Option)" class="font-weight-bold">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.Option) && (node.IsSelected)"
+                    [ngClass]="node.DataTypeName=='input'?'font-weight-bold':''">{{node.Question}} &nbsp;
+                    &nbsp;</label>
+                  <label *ngIf="(node.InputTypeName =='single') || (node.DataTypeName=='input')">{{node.QuestionText}}
+                    &nbsp; &nbsp;</label> <span *ngIf="!(node.Option) && (node.IsSelected)">( {{node.TechnicianName}}
+                    | {{node.CreatedOn | date: 'dd/MM/yyyy HH:mm'}} )</span>
+                  &nbsp; <a *ngIf="node.Images != null && node.Images?.length > 0" [attr.data-object]="node.Images"
+                    class="text-primary" (click)="imagesModal(node.Images)" style="white-space: nowrap;">
+                    View Images</a>
+                  <div class="node__children" style="width: 100%; padding-left: 15px;display: block;" *ngIf="!(node.Option) || (node.Option && node.IsSelected && node.DataTypeName != 'input') 
+                      || (node.Option && node.IsSelected && node.DataTypeName == 'input'  && lastItem)">
+                    <div *ngFor="let child of node.Children; 
+                      let i = index;
+                      let first = first; 
+                      let last = last">
+                      <ng-template [ngTemplateOutlet]="nodeTemplateRefwp"
+                        [ngTemplateOutletContext]="{node: child, index:index,lastItem:last }">
+                      </ng-template>
+                    </div>
+                  </div>
+
+                </div>
+              </ng-template>
+              <ng-template [ngTemplateOutlet]="nodeTemplateRefwp"
+                [ngTemplateOutletContext]="{ node: proceduredata, index: i,lastItem:false }"
+                *ngFor="let proceduredata of workproceduredata; let i =index">
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="machineRow" *ngIf="testing && testingdata!=null && testingdata.length>0">
+          <div class="headingTitle"><b>Testing</b></div>
+          <div class="testingstructure">
+            <div class="machineBox">
+              <ng-template #nodeTemplateReftesting let-node="node" let-index="index" let-lastItem="lastItem">
+                <div
+                  *ngIf="(node.IsSelected && node.DataTypeName != 'input') || (node.IsSelected && node.DataTypeName == 'input' && node.QuestionText != '') || (node.QuestionTypeName == 'label')">
+                  <b *ngIf="node.IsRoot && index > 0">
+                    <hr class="m-0"> <br />
+                  </b>
+                  <span>T{{node.QuestionDeatilId}} &nbsp;</span>
+                  <label *ngIf="!(node.Option)" class="font-weight-bold">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.Option) && (node.IsSelected)"
+                    [ngClass]="node.DataTypeName=='input'?'font-weight-bold':''">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.InputTypeName =='single') || (node.DataTypeName=='input')">{{node.QuestionText}}
+                    &nbsp; &nbsp;</label> <span *ngIf="!(node.Option) && (node.IsSelected)">( {{node.TechnicianName}} |
+                    {{node.CreatedOn | date: 'dd/MM/yyyy HH:mm'}} )</span>
+                  &nbsp; <a *ngIf="node.Images != null && node.Images?.length > 0" [attr.data-object]="node.Images"
+                    class="text-primary viewimages" (click)="imagesModal(node.Images)" style="white-space: nowrap;">
+                    View Images</a>
+                  <div class="node__children" style="width: 100%; padding-left: 15px;display: block;" *ngIf="!(node.Option) || (node.Option && node.IsSelected && node.DataTypeName != 'input') 
+                    || (node.Option && node.IsSelected && node.DataTypeName == 'input'  && lastItem)">
+                    <div *ngFor="let child of node.Children; 
+                      let i = index;
+                      let first = first; 
+                      let last = last">
+                      <ng-template [ngTemplateOutlet]="nodeTemplateReftesting"
+                        [ngTemplateOutletContext]="{node: child, index:index,lastItem:last }">
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template [ngTemplateOutlet]="nodeTemplateReftesting"
+                [ngTemplateOutletContext]="{ node: testingdetaildata, index: i,lastItem:false }"
+                *ngFor="let testingdetaildata of testingdata; let i =index">
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div class="machineRow" *ngIf="packageAndDelivery && packagedeliverydata!=null && packagedeliverydata.length>0">
+          <div class="headingTitle"><b>Package & Delievery</b></div>
+          <div class="testingstructure">
+            <div class="machineBox">
+              <ng-template #nodeTemplateRefpld let-node="node" let-index="index" let-lastItem="lastItem">
+                <div
+                  *ngIf="(node.IsSelected && node.DataTypeName != 'input') || (node.IsSelected && node.DataTypeName == 'input' && node.QuestionText != '') || (node.QuestionTypeName == 'label')">
+                  <b *ngIf="node.IsRoot && index > 0">
+                    <hr class="m-0"> <br />
+                  </b>
+                  <span>PL{{node.QuestionDeatilId}} &nbsp;</span>
+                  <label *ngIf="!(node.Option)" class="font-weight-bold">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.Option) && (node.IsSelected)"
+                    [ngClass]="node.DataTypeName=='input'?'font-weight-bold':''">{{node.Question}} &nbsp; &nbsp;</label>
+                  <label *ngIf="(node.InputTypeName =='single') || (node.DataTypeName=='input')">{{node.QuestionText}}
+                    &nbsp; &nbsp;</label> <span *ngIf="!(node.Option) && (node.IsSelected)">( {{node.TechnicianName}} |
+                    {{node.CreatedOn | date: 'dd/MM/yyyy HH:mm'}} )</span>
+                  &nbsp; <a *ngIf="node.Images != null && node.Images?.length > 0" [attr.data-object]="node.Images"
+                    class="text-primary viewimages" (click)="imagesModal(node.Images)" style="white-space: nowrap;">
+                    View Images</a>
+
+                  <div class="node__children" style="width: 100%; padding-left: 15px;display: block;" *ngIf="!(node.Option) || (node.Option && node.IsSelected && node.DataTypeName != 'input') 
+                    || (node.Option && node.IsSelected && node.DataTypeName == 'input'  && lastItem)">
+                    <div *ngFor="let child of node.Children; 
+                      let i = index;
+                      let first = first; 
+                      let last = last">
+                      <ng-template [ngTemplateOutlet]="nodeTemplateRefpld"
+                        [ngTemplateOutletContext]="{node: child, index:index,lastItem:last }">
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template [ngTemplateOutlet]="nodeTemplateRefpld"
+                [ngTemplateOutletContext]="{ node: packagedata, index: i ,lastItem:false}"
+                *ngFor="let packagedata of packagedeliverydata; let i =index">
+              </ng-template>
+            </div>
+          </div>
+        </div>
+
+        <div id="imagestoprint" style="page-break-inside: avoid; display: none;">
+          <div class="headingTitle"><b>Attached Images</b></div>
+          <table style="page-break-inside: avoid;" style="width: 100%;">
+            <div *ngFor="let stageimages of imagesData;" id="{{stageimages.stagename}}"
+              style="page-break-inside: avoid; display: none;">
+              <b> {{stageimages.displayName}} </b>
+              <tr class="row" *ngFor="let itemBlock of stageimages.data; let i = index">
+                <td class="col-md-4" style="padding: 10px !important; object-fit: cover;"
+                  *ngFor="let image of itemBlock; let j = index"><b>{{stageimages.initials}}{{image.QuestionDetailId}}
+                    &nbsp;</b> <img style="width: 100%;" src="{{this.api}}{{image.ImagePath}}"></td>
+              </tr>
+            </div>
+          </table>
+        </div>
+
+        <div class='footer'>
+          <div class="col-md-12 text-center companylogo" style="display: none;">
+            <b>
+              {{jobName}}
+            </b>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- <div *ngIf="loading" class="text-center" style="margin-bottom: 20px;">
+    Loading Please wait ....
+  </div> -->
+  </div>
+</div>
+
+<ng-template #ImagesPopupTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Question Images</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-answered-images [objectdata]='objectlist' (performModalActions)="closeModal()"></app-answered-images>
+  </div>
+</ng-template>

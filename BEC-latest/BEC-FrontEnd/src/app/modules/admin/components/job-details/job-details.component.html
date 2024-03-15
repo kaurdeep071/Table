@@ -1,0 +1,135 @@
+<div class="br-pagebody">
+   <div class="row row-sm">
+
+      <div class="machineBg">
+         <!---->
+         <div class="machineBox">
+            <div class="machineBoxInner">
+               <div class="row">
+                  <!---->
+                  <div class="col-sm-6">
+                     <div class="machineForm">
+                        <label><b>Job Code :</b></label>&nbsp;
+                        <label> {{jobData.JobCodeName}}</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-6">
+
+                     <div class="machineForm">
+                        <label><b>Job Type :</b></label>&nbsp;
+
+                        <label> {{jobData.JobTypeName}}</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-6">
+                     <div class="machineForm">
+                        <label><b>Client :</b></label>&nbsp;
+                        <label> {{jobData.ClientName}}</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-6">
+                     <div class="machineForm">
+                        <label><b>Start Date :</b></label>&nbsp;
+                        <label> {{jobData.StartDate | date: 'dd/MM/yyyy'}}</label>
+                     </div>
+                  </div>
+                  <div class="col-sm-6">
+                     <label><b>Machine Type</b></label>
+                     <select class="form-control" name="MachineTypeId" [(ngModel)]="jobData.MachineTypeId"
+                        #machinetype="ngModel" (change)="onChangeMachineTypeDropdown(machinetype.value)">
+                        <option value=0>Please Select</option>
+                        <option *ngFor="let machinetype of machineTypes" [value]="machinetype.MachineTypeId">
+                           {{machinetype.MachineType}}</option>
+                     </select>
+                  </div>
+                  <div class="col-sm-6">
+                     <label><b>Machine</b> </label>
+                     <select class="form-control" name="MachineId" [(ngModel)]="jobData.MachineId" #machine="ngModel"
+                        (change)="onChangeMachineDropdown($event.target.value)">
+                        <option value=0>Please Select</option>
+                        <option *ngFor="let machine of subMachineType" [value]="machine.MachineId">
+                           {{machine.MachineName}}</option>
+                     </select>
+                  </div>
+                  <div class="col-sm-6">
+                     <div class="questionsForm">
+                        <label><b>Segment</b></label>
+                        <select class="form-control" name="SegmentId" [(ngModel)]="jobData.SegmentId"
+                           #parentsegment="ngModel" (change)="onChangeSegmentDropdown(parentsegment.value)">
+                           <option value=0>Please Select</option>
+                           <option *ngFor="let parentsegment of parentSegment" [value]="parentsegment.SegmentId">
+                              {{parentsegment.Segment}}</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-sm-6">
+                     <div class="questionsForm">
+                        <label><b>Sub Segment</b></label>
+                        <select class="form-control" name="Segment" [(ngModel)]="jobData.SubsegmentId">
+                           <option value=0>Please Select</option>
+                           <option *ngFor="let subsegment of subSegment" [value]="subsegment.SegmentId">
+                              {{subsegment.Segment}}</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-sm-6">
+                     <div class="questionsForm">
+                        <label> Reference Document </label>
+                        <div id="mybutton">
+                           <input type="file" class="form-control" name="ReferenceDocument" (change)="docUpload($event)"
+                              [(ngModel)]="requestForm.documentPath" />
+                           <!-- <input type="file" id="myfile" class="form-control" name="ReferenceImage"
+   formControlName="ReferenceImage" [(ngModel)]="ReferenceImage" /> -->
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="questionsForm button">
+                        <button type="button" class="btn btn-blue-light lightBlueBtn"
+                           (click)="onCancel()">Cancel</button>&nbsp;
+                        <button class="btn btn-blue-light lightBlueBtn submitjobdetail"
+                           (click)="saveUpdatedModal(jobData)">Save</button>
+                     </div>
+                  </div>
+                  <!---->
+               </div>
+            </div>
+         </div>
+
+         <!---->
+         <div class="machineTypeTable">
+            <table class="table table-bordered">
+               <thead>
+                  <tr>
+                     <th>Document Name</th>
+                     <th>Created On</th>
+                     <th>Action</th>
+
+                  </tr>
+               </thead>
+               <tbody>
+
+                  <tr *ngIf="!(jobsDocumentdata.length>0)">
+
+                     <td colspan="6" class="text-center">No records found</td>
+                  </tr>
+                  <tr *ngFor="let jobdetailsdata of jobsDocumentdata">
+                     <td>{{jobdetailsdata.DocumentName}}</td>
+                     <td>{{jobdetailsdata.CreatedOn | date: 'dd/MM/yyyy'}}</td>
+                     <td><a class="fa fa-eye" title="View" target="_blank"
+                           href="{{apiUrl}}{{jobdetailsdata.DocumentPath}}"></a> &nbsp; &nbsp; <a class="fa fa-trash"
+                           (click)="deleteDocument(jobdetailsdata.DocumentId)" title="Delete"></a> &nbsp; &nbsp; <a class="fa fa-download"
+                           (click)="downloadDocument(jobdetailsdata.DocumentPath)" title="Download"></a> </td>
+                  </tr>
+               </tbody>
+            </table>
+
+
+         </div>
+
+         <!---->
+      </div>
+      <!---->
+   </div>
+</div>
+<!---->

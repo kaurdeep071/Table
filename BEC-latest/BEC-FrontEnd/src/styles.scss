@@ -1,0 +1,143 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "~font-awesome/css/font-awesome.css";
+
+@import "custom_variables.scss";
+@import "fonts.scss";
+@import "common.scss";
+
+
+/* Question Response decision tree */
+
+.QuestionResponseTree {
+    body {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+    }
+    .questionNode, .optionNode {
+        position: relative;
+    }
+    .questionNode {
+        width: 99%;
+        float: left;
+        padding: 6px;
+    }
+    .questionRootNode {
+        width: 99%;
+        float: left;
+        padding: 6px;
+        &:nth-child(odd) {
+            background-color: #eee;
+        }
+        &:nth-child(even) {
+            background-color: #fff;
+        }
+    }
+    .divQRecommendation {
+        width: 17%;
+        float: left;
+        select {
+            width: 96%;
+            padding: 6px 12px;
+            height: 37px;
+        }
+    }
+    .divQContents {
+        width: 50%;
+        float: left;
+    }
+    .divQuestionRoot {
+        float: left;
+        width: 22%;
+    }
+    .divQuestion {
+        float: left;
+    }
+    .divContain {
+        width: 96%;
+        margin: 0 auto;
+        width: 96%;
+        margin: 0 2%;
+        border: 2px solid #ddd;
+        float: left;
+    }
+    .divQComments {
+        float: left;
+        width: 11%;
+        textarea {
+            width: 100%;
+            height: 37px;
+        }
+    }
+    .hidden {
+        visibility: hidden;
+        position: absolute;
+        width: 0px;
+    }
+    .divQRecommendationHeader {
+        width: 17%;
+        float: left;
+    }
+    .divQContentHeader {
+        width: 50%;
+        float: left;
+    }
+    .divQuestionHeader {
+        float: left;
+        width: 22%;
+    }
+    .divContainHeader {
+        width: 96%;
+        margin: 0 auto;
+        background-color: #eee;
+        margin: 0;
+        float: left;
+        padding: 12px;
+        width: 100%;
+    }
+    .divQCommentsHeader {
+        float: left;
+        width: 10%;
+    }
+    
+}
+
+// Body admin Topggle 
+.superAdmin{
+    app-admin-header{
+        .header-navbar{
+            .navbar-wrapper{
+                .navbar-header{
+                    height: 50px;
+                    .navbar-nav{
+                        .nav-item{
+                            .navbar-brand{
+                                padding: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    app-admin-sidebar{
+        .br-sideleft{
+            width: 0px;
+            .br-sideleft-menu{
+                .br-menu-item{
+                    // .br-menu-link{
+                    //     justify-content: center;
+                    //     .menu-item-label{
+                    //         display: none;
+                    //     }
+                    // }
+                }
+            }
+        }
+    }
+    .content{
+        .br-mainpanel{
+            margin-left: 0px !important;
+        }
+    }
+    }

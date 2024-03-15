@@ -1,0 +1,207 @@
+<!-- <form #technicianForm="ngForm" novalidate (ngSubmit)="SaveData()"> -->
+
+      <div class="br-mainpanel" style="position: relative;">
+            <div class="br-pagebody">
+            <div class="row row-sm">
+            <div class="machineBgBreadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a>Report</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><b>Technician Bonus Points</b></li>
+            </ol>
+            </div>
+            
+            <div class="machineBg">
+            <form #technicianForm="ngForm" novalidate (ngSubmit)="SaveData(technicianForm)">
+            <div class="machineBox">
+            <div class="machineBoxInner">
+            <div class="row">
+            <div class="col-sm-6">
+            <div class="machineForm">
+            <div class="form-group">
+            <label>Technician Name<sup>*</sup></label>
+            <select class="form-control" name="userId" [(ngModel)]="saveDataForm.userId"
+            #techniciandropdowncontrol="ngModel"
+            (change)="onChangegetJobCodesDropdown()" required>
+            <option value="">Select Technician </option>
+            <option *ngFor="let detail of UserDetail" [value]="detail.UserId">
+            {{detail.FirstName}} {{detail.LastName}}</option>
+            </select>
+            <span class="help-block"
+            *ngIf="techniciandropdowncontrol.errors?.required && techniciandropdowncontrol.touched">
+            Technician name is required</span>
+            <!-- {{techniciandropdowncontrol.touched && techniciandropdowncontrol.invalid | json}} -->
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="machineForm">
+            <label>Jobs<sup>*</sup></label>
+            <select class="form-control" name="JobId" [(ngModel)]="saveDataForm.jobId"
+            #JobsControl="ngModel" required>
+            <option value="" selected>Jobs</option>
+            <option *ngFor="let record of getFullJobList" [value]="record.JobId">
+            {{record.JobCode}}</option>
+            </select>
+            <span class="help-block"
+            *ngIf="JobsControl.errors?.required && JobsControl.touched">Please select
+            job</span>
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="machineForm">
+            <label>Bonus Points<sup>*</sup></label>
+            <input type="number" class="form-control" name="points" [(ngModel)]="saveDataForm.points"
+            placeholder="Bonus Points" #points="ngModel" required />
+            <span class="help-block" *ngIf="points.errors?.required && points.touched">Points is
+            required</span>
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="machineForm">
+            <label>Description</label>
+            <textarea class="form-control" name="description" [(ngModel)]="saveDataForm.description"
+            [ngModelOptions]="{standalone: true}" placeholder="Type the description here"
+            #description="ngModel" required> </textarea>
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="machineForm">
+            </div>
+            </div>
+            <div class="col-sm-6">
+            <div class="machineForm rgt">
+            <a (click)="oncancal(technicianForm)"
+            class="btn btn-blue-light lightBlueBtn">Cancel</a>&nbsp;
+            <button type="submit" class="btn btn-blue-light lightBlueBtn"
+            [disabled]="technicianForm.invalid">Save</button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </form>
+            <div class="hr"></div>
+            <!---->
+            <div class="machineTypeSearch">
+            
+            </div>
+            <!---->
+            <div class="machineTypeTable">
+            <div class="row">
+            <div class="col-sm-4">
+            <div class="machineForm">
+            <div class="machineForm">
+            <label>Technician Name</label>
+            <select class="form-control" name="userId" [(ngModel)]="filterForm.userId"
+            [ngModelOptions]="{standalone: true}" #technician="ngModel" required>
+            <option value=0 selected>Select Technician </option>
+            <option *ngFor="let detail of UserDetail" [value]="detail.UserId">
+            {{detail.FirstName}} {{detail.LastName}}</option>
+            </select>
+            <!-- <span class="help-block" *ngIf="technician.invalid">Name is required</span> -->
+            </div>
+            </div>
+            </div>
+            
+            <div class="col-sm-4">
+            <div class="machineForm">
+            <label>From</label>
+            <div class="input-group">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar"
+            aria-hidden="true"></i></span>
+            </div>
+            <input class="form-control bg-white" readonly="readonly" #drp="bsDatepicker" bsDatepicker
+            [(ngModel)]="filterForm.startDate" name="startDate" autocomplete="off"
+            [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY' }">
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-4">
+            <div class="machineForm">
+            <label>To</label>
+            <div class="input-group">
+            <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon2"><i class="fa fa-calendar"
+            aria-hidden="true"></i></span>
+            </div>
+            <input class="form-control bg-white" readonly="readonly" #drp="bsDatepicker" bsDatepicker
+            [(ngModel)]="filterForm.endDate" name="endDate" autocomplete="off"
+            [bsConfig]="{ dateInputFormat: 'MM-DD-YYYY' }">
+            
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-12">
+            <div class="mt-2 mb-2 text-right">
+            <button class="btn btn-blue-light lightBlueBtn" (click)="onFilterClick()">
+            Apply Filters
+            </button>
+            </div>
+            </div>
+            </div>
+            <div class="">
+            <div class="row">
+            <div class="col-sm-12">
+            <div class="text-right mt-2 mb-2">
+            <span class="border border-info p-2">Total Bonus Points: {{totalPoints}}</span>
+            </div>
+            </div>
+            </div>
+            <table class="table table-bordered">
+            <thead>
+            <tr>
+            <th><a>Technician</a></th>
+            <th><a>Job Code</a></th>
+            <th><a>Bonus Points</a></th>
+            <th><a>Description</a></th>
+            <th><a>Created On</a></th>
+            <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of allRecords">
+            <td>{{data.Name}}</td>
+            <td>{{data.JobCode}}</td>
+            <td>{{data.points}}</td>
+            <td>{{data.Description}}</td>
+            <td>{{data.CreatedOn | date: 'dd/MM/yyyy'}}</td>
+            <td align="middle">
+            <div class="edit"><a title="Edit" (click)="onEdit(data)"><i class="fa fa-pencil black"
+            aria-hidden="true"></i></a></div>
+            <div class="cross"><a (click)="onDelete(data.ProductivityPointsId)"><i title="Delete"
+            class="fa fa-trash red" aria-hidden="true"></i></a></div>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+            </div>
+            <tr *ngIf="allItems >10">
+            <!-- <tr *ngIf="allItems > 10 && (searchText == null || searchText =='')"> -->
+            <td>
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+            <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+            <a class="page-link" (click)="getPage(1)">First</a>
+            </li>
+            <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+            <a class="page-link" (click)="getPage(pager.currentPage - 1)">Previous</a>
+            </li>
+            <li class="page-item" *ngFor="let page of pager.pages"
+            [ngClass]="{active:pager.currentPage === page}">
+            <a class="page-link" (click)="getPage(page)">{{page}}</a>
+            </li>
+            <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+            <a class="page-link" (click)="getPage(pager.currentPage + 1)">Next</a>
+            </li>
+            <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+            <a class="page-link" (click)="getPage(pager.totalPages)">Last</a>
+            </li>
+            </ul>
+            </td>
+            </tr>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <!-- </form> -->
